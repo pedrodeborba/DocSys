@@ -16,7 +16,6 @@ export default function Perfil(){
     )
 }
 
-    
 
 const styles = StyleSheet.create({
     container: {

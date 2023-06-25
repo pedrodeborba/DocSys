@@ -57,6 +57,17 @@ export default function Home() {
                     </View>
                 </View>
             </View>
+
+            <View style={styles.section}>
+                <View style={styles.box}>
+                    <View style={styles.halfA}>
+                        <View>
+                            <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
+                        </View>
+                        <Text style={styles.textFisio}>João Borba</Text>
+                    </View>
+                </View>
+            </View>
             
             {/*Colocar o Bottom tab bar*/}
         </SafeAreaView>
@@ -86,9 +97,10 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     sectionOne:{
-        height:180, 
+        height:160, 
+        marginTop: 20,
         width: "100%",
-        backgroundColor: "#000",
+        backgroundColor: "#fff",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -153,7 +165,8 @@ const styles = StyleSheet.create({
         color: "#fff",
     },
     section:{
-        height: 140, 
+        marginTop: 20,
+        height: 90, 
         width: "100%",
         backgroundColor: "#fff",
         justifyContent: "center",
@@ -162,10 +175,22 @@ const styles = StyleSheet.create({
     box:{
         width: "80%",
         height: 90,
-        backgroundColor:"#D8DDFC",
+        backgroundColor:"#EDEFFF",
         borderWidth: 1,
         borderColor: "#6F7BF7",
         borderRadius: 20,
+    },
+    imgFisio:{
+        height: 80,
+        width: 80,
+        marginTop: 10,
+        marginLeft: 10,
+    },
+    textFisio:{
+        fontSize: 20,
+        fontWeight: "bold",
+        color:"#6F7BF7",
+        marginLeft: 40,
     },
 
     
