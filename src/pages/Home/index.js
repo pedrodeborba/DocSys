@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, SafeAreaView, Image} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView} from 'react-native';
 import {FontAwesome} from 'react-native-vector-icons'
+import {MaterialCommunityIcons} from 'react-native-vector-icons'
 
 export default function Home() {
     return(
@@ -16,11 +17,10 @@ export default function Home() {
                 <FontAwesome name="bell-o" size={23} color="#6F7BF7" style={{marginLeft:45}} />
             </View>
 
-            
             <View style={styles.sectionOne}>{/*section*/}
                 <View style={styles.consultaMarcada}>
                     <View style={styles.halfA}>{/*Metade da div: Icon and Title*/}
-                        <View style={styles.iconRadius}><FontAwesome name="calendar-o" size={23} color="#fff" /></View>
+                        <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar-clock" size={23} color="#fff" /></View>
                         <Text style={styles.schedulingText}>Consulta marcada</Text>
                     </View>
                     <View style={styles.halfB}>
@@ -40,16 +40,25 @@ export default function Home() {
                 </View>
             </View>
 
-            <View style={styles.sectionTwo}>
+            <View style={styles.section}>
                 <View style={styles.box}>
-                    <View>
-                        
-                    </View>
-                    <View>
-
+                    <View style={styles.halfA}>
+                        <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar" size={23} color="#fff" /></View>
+                        <Text style={styles.schedulingText}>Agende sua consulta</Text>
                     </View>
                 </View>
             </View>
+
+            <View style={styles.section}>
+                <View style={styles.box}>
+                    <View style={styles.halfA}>
+                        <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar-cursor" size={23} color="#fff" /></View>
+                        <Text style={styles.schedulingText}>Histórico de consultas</Text>
+                    </View>
+                </View>
+            </View>
+            
+            {/*Colocar o Bottom tab bar*/}
         </SafeAreaView>
     )
 }
@@ -61,7 +70,7 @@ const styles = StyleSheet.create({
     },
     header:{
         backgroundColor: "#EDEFFF",
-        height: 120,
+        height: 100,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
@@ -106,14 +115,12 @@ const styles = StyleSheet.create({
     },
     halfA:{
         height:80,
-        backgroundColor:"#D8DDFC",
         alignItems:"center",
         flexDirection: 'row',
         borderRadius: 10
     },
     halfB:{
         height:80,
-        backgroundColor:"#D8DDFC",
         justifyContent:"center",
         alignItems:"center",
         flexDirection: 'row',
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
     optionsTextEdit:{
         color: "#fff",
     },
-    sectionTwo:{
+    section:{
         height: 140, 
         width: "100%",
         backgroundColor: "#fff",
@@ -155,7 +162,10 @@ const styles = StyleSheet.create({
     box:{
         width: "80%",
         height: 90,
-        backgroundColor: "#000",
+        backgroundColor:"#D8DDFC",
+        borderWidth: 1,
+        borderColor: "#6F7BF7",
+        borderRadius: 20,
     },
 
     
