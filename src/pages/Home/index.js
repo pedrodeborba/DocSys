@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image} from 'react-native';
 import {FontAwesome} from 'react-native-vector-icons'
 
 export default function Home() {
@@ -43,7 +43,7 @@ export default function Home() {
             <View style={styles.sectionTwo}>
                 <View style={styles.box}>
                     <View>
-
+                        
                     </View>
                     <View>
 
@@ -160,3 +160,4 @@ const styles = StyleSheet.create({
 
     
 })
+

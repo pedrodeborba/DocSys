@@ -9,11 +9,11 @@ import Home from './src/pages/Home';
 const Stack = createStackNavigator();
 function MyStack() {
   return (
-    <Stack.Navigator initialRouteName="FirstScreen">
-      <Stack.Screen name="FirstScreen" component={FirstScreen} />
-      <Stack.Screen name="Paciente" component={Paciente} />
-      <Stack.Screen name="Profissional" component={Profissional} />
-      <Stack.Screen name="Home" component={Home} /> 
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen name="FirstScreen" component={FirstScreen} options={{ headerShown: false }}/>
+      <Stack.Screen name="Paciente" component={Paciente} options={{ headerShown: false }}/>
+      <Stack.Screen name="Profissional" component={Profissional} options={{ headerShown: false }}/>
+      <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} /> 
     </Stack.Navigator>
   );
 }
