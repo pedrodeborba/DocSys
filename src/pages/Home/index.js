@@ -17,58 +17,83 @@ export default function Home() {
                 <FontAwesome name="bell-o" size={23} color="#6F7BF7" style={{marginLeft:45}} />
             </View>
 
-            <View style={styles.sectionOne}>{/*section*/}
-                <View style={styles.consultaMarcada}>
-                    <View style={styles.halfA}>{/*Metade da div: Icon and Title*/}
-                        <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar-clock" size={23} color="#fff" /></View>
-                        <Text style={styles.schedulingText}>Consulta marcada</Text>
+            <ScrollView>
+                <View style = {styles.conteudo}>
+                    <View style={styles.sectionOne}>{/*section*/}
+                        <View style={styles.consultaMarcada}>
+                            <View style={styles.halfA}>{/*Metade da div: Icon and Title*/}
+                                <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar-clock" size={23} color="#fff" /></View>
+                                <Text style={styles.schedulingText}>Consulta marcada</Text>
+                            </View>
+                            <View style={styles.halfB}>
+                                <View style={styles.options}>
+                                    <FontAwesome name="calendar-o" size={20} color="#6F7BF7" style={{marginRight:10}}/>
+                                    <Text style={styles.optionsText}>07/01</Text>
+                                </View>
+                                <View style={styles.options}>
+                                    <FontAwesome name="clock-o" size={25} color="#6F7BF7" style={{marginRight:10}}/>
+                                    <Text style={styles.optionsText}>14:00</Text>
+                                </View>
+                                <View style={styles.optionsEdit}>
+                                    <FontAwesome name="commenting-o" size={20} color="#fff" style={{marginRight:10}} />
+                                    <Text style={styles.optionsTextEdit}>Contatar</Text>
+                                </View>
+                            </View>
+                        </View>
                     </View>
-                    <View style={styles.halfB}>
-                        <View style={styles.options}>
-                            <FontAwesome name="calendar-o" size={20} color="#6F7BF7" style={{marginRight:10}}/>
-                            <Text style={styles.optionsText}>07/01</Text>
-                        </View>
-                        <View style={styles.options}>
-                            <FontAwesome name="clock-o" size={25} color="#6F7BF7" style={{marginRight:10}}/>
-                            <Text style={styles.optionsText}>14:00</Text>
-                        </View>
-                        <View style={styles.optionsEdit}>
-                            <FontAwesome name="commenting-o" size={20} color="#fff" style={{marginRight:10}} />
-                            <Text style={styles.optionsTextEdit}>Contatar</Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
 
-            <View style={styles.section}>
-                <View style={styles.box}>
-                    <View style={styles.halfA}>
-                        <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar" size={23} color="#fff" /></View>
-                        <Text style={styles.schedulingText}>Agende sua consulta</Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.section}>
-                <View style={styles.box}>
-                    <View style={styles.halfA}>
-                        <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar-cursor" size={23} color="#fff" /></View>
-                        <Text style={styles.schedulingText}>Histórico de consultas</Text>
-                    </View>
-                </View>
-            </View>
-
-            <View style={styles.section}>
-                <View style={styles.box}>
-                    <View style={styles.halfA}>
-                        <View>
-                            <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
+                    <View style={styles.section}>
+                        <View style={styles.box}>
+                            <View style={styles.halfA}>
+                                <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar" size={23} color="#fff" /></View>
+                                <Text style={styles.schedulingText}>Agende sua consulta</Text>
+                            </View>
                         </View>
-                        <Text style={styles.textFisio}>João Borba</Text>
+                    </View>
+
+                    <View style={styles.section}>
+                        <View style={styles.box}>
+                            <View style={styles.halfA}>
+                                <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar-cursor" size={23} color="#fff" /></View>
+                                <Text style={styles.schedulingText}>Histórico de consultas</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={styles.section}>
+                        <View style={styles.box}>
+                            <View style={styles.halfA}>
+                                <View>
+                                    <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
+                                </View>
+                                <Text style={styles.textFisio}>João Borba</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={styles.section}>
+                        <View style={styles.box}>
+                            <View style={styles.halfA}>
+                                <View>
+                                    <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
+                                </View>
+                                <Text style={styles.textFisio}>João Borba</Text>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={styles.section}>
+                        <View style={styles.box}>
+                            <View style={styles.halfA}>
+                                <View>
+                                    <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
+                                </View>
+                                <Text style={styles.textFisio}>João Borba</Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
-            </View>
-            
+            </ScrollView>
             {/*Colocar o Bottom tab bar*/}
         </SafeAreaView>
     )
@@ -81,10 +106,14 @@ const styles = StyleSheet.create({
     },
     header:{
         backgroundColor: "#EDEFFF",
-        height: 100,
+        height: "15%",
+        paddingTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row'
+    },
+    conteudo:{
+        marginBottom: 100,
     },
     headerText:{
         color: "#6F7BF7",

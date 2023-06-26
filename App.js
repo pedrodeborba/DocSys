@@ -26,6 +26,10 @@ const Tab = createBottomTabNavigator();
           position: "absolute",
           backgroundColor: "#D8DDFC",
           height: 60,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          left: 10,
+          right: 10,
         }
       }}>
 
