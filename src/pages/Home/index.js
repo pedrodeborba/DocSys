@@ -8,7 +8,7 @@ export default function Home() {
             <View style={styles.header}>
                 <Image 
                 source={require('../../../assets/perfil.png')}
-                style={{width:60, height: 60, marginLeft: 0}} 
+                style={{width:60, height: 60, marginLeft: 0}}
                 />
                 <Text style={styles.headerText}>
                     Olá, Pedro{'\n'}
@@ -44,7 +44,7 @@ export default function Home() {
 
                     <View style={styles.section}>
                         <View style={styles.box}>
-                            <View style={styles.halfA}>
+                            <View style={styles.stylingArea}>
                                 <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar" size={23} color="#fff" /></View>
                                 <Text style={styles.schedulingText}>Agende sua consulta</Text>
                             </View>
@@ -53,7 +53,7 @@ export default function Home() {
 
                     <View style={styles.section}>
                         <View style={styles.box}>
-                            <View style={styles.halfA}>
+                            <View style={styles.stylingArea}>
                                 <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar-cursor" size={23} color="#fff" /></View>
                                 <Text style={styles.schedulingText}>Histórico de consultas</Text>
                             </View>
@@ -62,29 +62,7 @@ export default function Home() {
 
                     <View style={styles.section}>
                         <View style={styles.box}>
-                            <View style={styles.halfA}>
-                                <View>
-                                    <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
-                                </View>
-                                <Text style={styles.textFisio}>João Borba</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.section}>
-                        <View style={styles.box}>
-                            <View style={styles.halfA}>
-                                <View>
-                                    <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
-                                </View>
-                                <Text style={styles.textFisio}>João Borba</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={styles.section}>
-                        <View style={styles.box}>
-                            <View style={styles.halfA}>
+                            <View style={styles.stylingArea}>
                                 <View>
                                     <Image style = {styles.imgFisio} source = {require("../../../assets/Fisioterapeuta.png")} />
                                 </View>
@@ -126,7 +104,7 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     sectionOne:{
-        height:160, 
+        height:220, 
         marginTop: 20,
         width: "100%",
         backgroundColor: "#fff",
@@ -137,7 +115,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         color:"#6F7BF7",
-        marginLeft: 15
+        marginLeft: 20
     },
     iconRadius:{
         height: 50,
@@ -151,17 +129,17 @@ const styles = StyleSheet.create({
     consultaMarcada:{
         backgroundColor:"#D8DDFC",
         width: "80%",
-        height: 160,
+        height: 200,
         borderRadius: 10
     },
     halfA:{
-        height:80,
+        height: 100,
         alignItems:"center",
         flexDirection: 'row',
         borderRadius: 10
     },
     halfB:{
-        height:80,
+        height: 100,
         justifyContent:"center",
         alignItems:"center",
         flexDirection: 'row',
@@ -169,7 +147,7 @@ const styles = StyleSheet.create({
     },
     options:{
         width: 95,
-        height: 50,
+        height: 60,
         backgroundColor: "#fff",
         marginLeft: 5,
         borderRadius: 10,
@@ -183,7 +161,7 @@ const styles = StyleSheet.create({
     },
     optionsEdit:{
         width: 95,
-        height: 50,
+        height: 60,
         backgroundColor: "#6F7BF7",
         marginLeft: 5,
         borderRadius: 10,
@@ -195,11 +173,16 @@ const styles = StyleSheet.create({
     },
     section:{
         marginTop: 20,
-        height: 90, 
-        width: "100%",
+        height: 120,
         backgroundColor: "#fff",
         justifyContent: "center",
         alignItems: "center",
+    },
+    stylingArea:{
+        height: 90,
+        alignItems:"center",
+        flexDirection: 'row',
+        borderRadius: 10
     },
     box:{
         width: "80%",
@@ -212,7 +195,6 @@ const styles = StyleSheet.create({
     imgFisio:{
         height: 80,
         width: 80,
-        marginTop: 10,
         marginLeft: 10,
     },
     textFisio:{
