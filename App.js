@@ -12,7 +12,7 @@ import FirstScreen from './src/pages/FirstScreen'
 import Paciente from './src/pages/Paciente';
 import Profissional from './src/pages/Profissional';
 import Home from './src/pages/Home';
-import Agendar from './src/pages/Agendar'
+import Agendamento from './src/pages/Agendamento'
 import Perfil from './src/pages/Perfil'
 
 //Bottom Tab Navigator
@@ -34,8 +34,8 @@ const Tab = createBottomTabNavigator();
       }}>
 
       <Tab.Screen 
-        name="Agendar" 
-        component={Agendar} 
+        name="Agendamento" 
+        component={Agendamento} 
         options={{ 
           headerShown: false,
 
@@ -87,7 +87,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="FirstScreen">
         <Stack.Screen name="FirstScreen" component={FirstScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Paciente" component={Paciente} options={{ headerShown: false }}/>
         <Stack.Screen name="Profissional" component={Profissional} options={{ headerShown: false }}/>
