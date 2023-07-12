@@ -2,7 +2,15 @@ import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView} from 'react-na
 import {FontAwesome} from 'react-native-vector-icons'
 import {MaterialCommunityIcons} from 'react-native-vector-icons'
 
-export default function Home() {
+export default function Home({navigation}) {
+
+    const agendar = () => {
+        navigation.reset({
+            index: 0,
+            routes: [{name: "Agendamento"}],
+        })
+    }
+
     return(
         <SafeAreaView style={styles.body}>
             <View style={styles.header}>
@@ -46,7 +54,7 @@ export default function Home() {
                         <View style={styles.box}>
                             <View style={styles.stylingArea}>
                                 <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar" size={23} color="#fff" /></View>
-                                <Text style={styles.schedulingText}>Agende sua consulta</Text>
+                                <Text style={styles.schedulingText} onPress={()=> agendar()} >Agende sua consulta</Text>
                             </View>
                         </View>
                     </View>
