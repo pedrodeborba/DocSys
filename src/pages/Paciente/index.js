@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {MaterialCommunityIcons} from 'react-native-vector-icons'
 import {
   StyleSheet,
   Text,
@@ -80,7 +81,7 @@ export default function Paciente({ navigation }) {
       Animated.timing(logoSizeAnimated, {
         toValue: 150,
         duration: 100,
-      }),
+      })
     ]).start();
   }
 
@@ -97,8 +98,16 @@ export default function Paciente({ navigation }) {
     ]).start();
   }
 
+  // Esconder topView
+  const [shouldShow, setshouldShow] = useState(true);
+
   return (
     <KeyboardAvoidingView style={styles.background}>
+      
+      <View style={styles.topView}>
+        <MaterialCommunityIcons name="arrow-left-thin" size={70} color="#6F7BF7" style={{marginLeft:10}} />
+      </View>
+       
       <View style={styles.logo}>
         <Animated.Image
           style={{
@@ -150,14 +159,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  topView: {
+    height: "10%",
+    width: '100%',
+    backgroundColor: "#D8DDFC",
+    alignItems: "center",
+    flexDirection: 'row',
+    rowGap: 20,
+    paddingTop: 20,
+  },
+  textTopView: {
+    fontSize: 25,
+    color: "#fff",
+  },
   logo: {
     flex: 1,
     backgroundColor: '#6F7BF7',
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: "center",
-    marginBottom: 100,
-    marginTop: 100
+    marginBottom: 30,
+    marginTop: 30
   },
   container: {
     flex: 1,

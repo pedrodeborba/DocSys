@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {FontAwesome} from 'react-native-vector-icons'
 import {MaterialCommunityIcons} from 'react-native-vector-icons'
 
@@ -24,7 +24,7 @@ export default function Home({navigation}) {
                 </Text>
                 <FontAwesome name="bell-o" size={23} color="#6F7BF7" style={{marginLeft:45}} />
             </View>
-
+        
             <ScrollView>
                 <View style = {styles.conteudo}>
                     <View style={styles.sectionOne}>{/*section*/}
@@ -52,10 +52,12 @@ export default function Home({navigation}) {
 
                     <View style={styles.section}>
                         <View style={styles.box}>
-                            <View style={styles.stylingArea}>
-                                <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar" size={23} color="#fff" /></View>
-                                <Text style={styles.schedulingText} onPress={()=> agendar()} >Agende sua consulta</Text>
-                            </View>
+                            <TouchableOpacity onPress={()=> agendar()}>
+                                <View style={styles.stylingArea}>
+                                    <View style={styles.iconRadius}><MaterialCommunityIcons name="calendar" size={23} color="#fff" /></View>
+                                    <Text style={styles.schedulingText} >Agende sua consulta</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
 
