@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {MaterialCommunityIcons} from 'react-native-vector-icons'
+import {Ionicons} from 'react-native-vector-icons'
 import {
   StyleSheet,
   Text,
@@ -20,8 +20,8 @@ export default function Paciente({ navigation }) {
     const data = { username, code };
     console.log(data);
   }
-
-  const entrar = () => {
+//OPEN and EXIT {
+  const open = ()=>{
     handleSignIn();
     if (username !== '' && code === '123') {
       navigation.reset({
@@ -32,6 +32,15 @@ export default function Paciente({ navigation }) {
       alert('Informe o código correto!');
     }
   };
+
+  const exit = ()=>{
+    navigation.reset({
+      index: 0,
+      routes: [{name: "FirstScreen"}]
+    });
+  }
+
+// }
 
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }));
   const [opacity] = useState(new Animated.Value(0));
@@ -105,7 +114,9 @@ export default function Paciente({ navigation }) {
     <KeyboardAvoidingView style={styles.background}>
       
       <View style={styles.topView}>
-        <MaterialCommunityIcons name="arrow-left-thin" size={70} color="#6F7BF7" style={{marginLeft:10}} />
+        <TouchableOpacity onPress={exit}>
+          <Ionicons name="ios-arrow-back" size={24} color="#6F7BF7" />
+        </TouchableOpacity>
       </View>
        
       <View style={styles.logo}>
@@ -144,7 +155,7 @@ export default function Paciente({ navigation }) {
           secureTextEntry={true}
         />
 
-        <TouchableOpacity style={styles.btn} onPress={entrar}>
+        <TouchableOpacity style={styles.btn} onPress={open}>
           <Text style={styles.btnText}>Entrar</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -162,11 +173,11 @@ const styles = StyleSheet.create({
   topView: {
     height: "10%",
     width: '100%',
-    backgroundColor: "#D8DDFC",
     alignItems: "center",
     flexDirection: 'row',
     rowGap: 20,
     paddingTop: 20,
+    paddingLeft: 10,
   },
   textTopView: {
     fontSize: 25,

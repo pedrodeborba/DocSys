@@ -36,11 +36,11 @@ export default function Home({navigation}) {
                             <View style={styles.halfB}>
                                 <View style={styles.options}>
                                     <FontAwesome name="calendar-o" size={20} color="#6F7BF7" style={{marginRight:10}}/>
-                                    <Text style={styles.optionsText}>07/01</Text>
+                                    <Text style={styles.optionsText}>18/07</Text>
                                 </View>
                                 <View style={styles.options}>
                                     <FontAwesome name="clock-o" size={25} color="#6F7BF7" style={{marginRight:10}}/>
-                                    <Text style={styles.optionsText}>14:00</Text>
+                                    <Text style={styles.optionsText}>17:15</Text>
                                 </View>
                                 <View style={styles.optionsEdit}>
                                     <FontAwesome name="commenting-o" size={20} color="#fff" style={{marginRight:10}} />

@@ -13,7 +13,7 @@ import Paciente from "./src/pages/Paciente";
 import Profissional from "./src/pages/Profissional";
 import Home from "./src/pages/Home";
 import Agendamento from "./src/pages/Agendamento";
-import Perfil from "./src/pages/Perfil";
+import Perfil from "./src/pages/Perfil"
 
 //Bottom Tab Navigator
 const Tab = createBottomTabNavigator();

@@ -1,7 +1,6 @@
 import React from 'react';
-
 import {useState, useEffect,} from 'react';
-
+import {Ionicons} from 'react-native-vector-icons';
 import { 
    StyleSheet,
    Text, 
@@ -24,6 +23,7 @@ export default function Profissional({navigation}) {
         console.log(data)
     }
 
+//OPEN and EXIT {
     const entrar = () => {
         handleSignIn();
         if(code == "12345678" && email ==  "apodef@gmail.com"){
@@ -33,6 +33,14 @@ export default function Profissional({navigation}) {
             })
         }else alert("Email e/ou senha incorretos!");
     }
+
+    const exit = ()=>{
+        navigation.reset({
+            index: 0,
+            routes: [{name : "FirstScreen"}]
+        });
+    }
+// }
 
     const [offset] = useState(new Animated.ValueXY({x:0,y:95}));
     const[opacity] =  useState(new Animated.Value(0));
@@ -78,7 +86,7 @@ export default function Profissional({navigation}) {
             duration:100,
         }),
         Animated.timing(logoAnimated.y, {
-            toValue: 250,
+            toValue: 200,
             duration:100,
         })
         ]).start();
@@ -86,6 +94,12 @@ export default function Profissional({navigation}) {
 
     return (
     <KeyboardAvoidingView style={styles.backgound}>
+        <View style={styles.topView}>
+            <TouchableOpacity onPress={exit}>
+                <Ionicons name="ios-arrow-back" size={24} color="#6F7BF7" />
+            </TouchableOpacity>
+        </View>
+
         <View style={styles.logo}>
             <Animated.Image
             style={{
@@ -142,14 +156,24 @@ export default function Profissional({navigation}) {
         alignItems: 'center',
         justifyContent: 'center',
     },
-
+    topView: {
+        height: "10%",
+        width: '100%',
+        alignItems: "center",
+        flexDirection: 'row',
+        rowGap: 20,
+        paddingTop: 20,
+        paddingLeft: 10,
+      },
     logo: {
-        flex:1,
-        backgroundColor: "#6F7BF7",
+        flex: 1,
+        backgroundColor: '#6F7BF7',
         borderRadius: 20,
         justifyContent: 'center',
+        alignItems: "center",
+        marginBottom: 30,
+        marginTop: 30
     },
-
     container: {
         flex:1,
         alignItems: 'center',
@@ -157,7 +181,6 @@ export default function Profissional({navigation}) {
         width: '90%',
         paddingBottom: 5,
     },
-
     input: {
         backgroundColor: '#fff',
         width: '90%',

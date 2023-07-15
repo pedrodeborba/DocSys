@@ -24,7 +24,7 @@ export default function FirstScreen({navigation}) {
             </View>
             <Text style={styles.textP}>Escolha o tipo de usuário</Text>
             <TouchableOpacity style={styles.button} onPress={()=>ProfisEnter()}>
-                <Text style={styles.textButton}>Profissional</Text>
+                <Text style={styles.textButton}>Fisioterapeuta</Text>
             </TouchableOpacity>
             <TouchableOpacity title="Sou Paciente" style={styles.button} onPress={()=>PaciEnter()}>
                 <Text style={styles.textButton}>Paciente</Text>

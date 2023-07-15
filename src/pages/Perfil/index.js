@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -10,22 +11,21 @@ import {
   TouchableOpacity,
   TextInput
 } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 //Pegar informações do banco de dados
 const nome = 'Pedro';
 const idade = 18;
-const cidade = 'Igrejinha';
+const email = 'admin@gmail.com';
 
 
 // Configurando FlatList
 const DATA = [
   { id: 1, text: `${nome}` },
   { id: 2, text: `${idade}` },
-  { id: 3, text: `${cidade}` },
+  { id: 3, text: `${email}` },
 ]
 
-export default function App() {
+export default function Perfil({ navigation }) {
     const [data, setdata] = useState(DATA);
     const [isRender, setisRender] = useState(false);
     const [isModalVisible, setisModalVisible] = useState(false);
@@ -49,7 +49,7 @@ export default function App() {
           prefix = "Idade: ";
           break;
         case 2:
-          prefix = "Cidade: ";
+          prefix = "Email: ";
           break;
         default:
           break;
@@ -83,12 +83,24 @@ export default function App() {
       handleEditItem(editItem);
       setisModalVisible(false);
     };
+
+//LOGOUT {
+    const logout = ()=>{
+      navigation.reset({
+        index: 0,
+        routes: [{name: "FirstScreen"}]
+      });
+    }
+// }
   
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.titleBar}>
           <Ionicons name="ios-arrow-back" size={24} color="#52575D" />
-          <MaterialIcons name="more-vert" size={24} color="#52575D" />
+
+          <TouchableOpacity onPress={logout}>
+            <MaterialIcons name="logout" size={24} color="#52575D" />
+          </TouchableOpacity>
         </View>
   
         <View style={{ alignSelf: "center" }}>
