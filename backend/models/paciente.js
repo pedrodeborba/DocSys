@@ -1,22 +1,12 @@
-const { Paciente } = require('../index');
+const mongoose = require ('mongoose');
+// const { ObjectId } = require('bson');
 
-exports.GetTcc = async () => {
-    try {
-      const pacientesArray = await Paciente.find({});
-      console.log('Dados do Paciente:', pacientesArray);
+const pacienteSchema = new mongoose.Schema({
+  // _id: ObjectId,
+  name: String,
+  code: String
+})
 
-      return pacientesArray;
-    } catch (error) {
-      console.error('Erro ao buscar dados do Paciente:', error);
-      throw error;
-    }
-};
+const pacienteModel = mongoose.model('Paciente', pacienteSchema);
 
-// Chamada da função GetTcc
-exports.GetTcc()
-  .then(data => {
-    console.log('Dados recebidos:', data);
-  })
-  .catch(error => {
-    console.error('Erro ao buscar dados:', error);
-  });
+module.exports = pacienteModel;

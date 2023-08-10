@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
-const { ObjectId } = require('bson');
+const express = require ('express');
+const cors = require ('cors'); //
+const pacienteModel = require ('./models/paciente');
 
-mongoose.connect('mongodb+srv://admin:isEx1DAqFiQEo2k5@tcc.zpk1kby.mongodb.net/', {
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+mongoose.connect('mongodb+srv://admin:isEx1DAqFiQEo2k5@tcc.zpk1kby.mongodb.net/tcc', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -12,24 +18,23 @@ db.once('open', () => {
   console.log('Conexão com o MongoDB estabelecida com sucesso!');
 });
 
-const pacienteSchema = new mongoose.Schema({
-    _id: ObjectId,
-    name: String,
-    email: String,
+app.post('/paciente', (req,res) => {
+  const {name} = req.body;
+  const {code} = req.body;
+
+  pacienteModel.findOne({name: name, code: code}).then(paciente => {
+    if(paciente){
+      if(paciente.name == name){
+        res.json({msg: 'Usuário já cadastrado'});
+      }
+    }else{
+      pacienteModel.create(req.body).then(paciente => res.json(paciente)).catch(err => res.json(err));
+    }
+  });
+
 });
 
-const Paciente = mongoose.model('Paciente', pacienteSchema);
-
-exports.GetTcc = async () => {
-    try {
-
-      const pacientes = await Paciente.find({});
-      console.log('Dados do Paciente:', pacientes);
-
-      return pacientes;
-    } catch (error) {
-      console.error('Erro ao buscar dados do Paciente:', error);
-      throw error;
-    }
-};
+app.listen(3001, () => {
+  console.log("Servidor no Ar!");
+})
 

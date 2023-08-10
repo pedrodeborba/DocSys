@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Ionicons} from 'react-native-vector-icons'
+import axios from 'axios';
 import {
   StyleSheet,
   Text,
@@ -13,17 +14,16 @@ import {
 } from 'react-native';
 
 export default function Paciente({ navigation }) {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
   const [code, setCode] = useState('');
 
-  function handleSignIn() {
-    const data = { username, code };
-    console.log(data);
+  function handleSignIn () {
+    const resp = axios.post('http://192.168.1.22:3001/paciente', {name, code}).then(result => console.log(result)).catch(err => console.log(err));
   }
 //OPEN and EXIT {
   const open = ()=>{
     handleSignIn();
-    if (username !== '' && code === '123') {
+    if (name !== '') {
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
@@ -142,8 +142,8 @@ export default function Paciente({ navigation }) {
           style={styles.input}
           placeholder="Nome Completo"
           autoCorrect={false}
-          onChangeText={setUsername}
-          value={username}
+          onChangeText={setName}
+          value={name}
         />
 
         <TextInput
