@@ -26,7 +26,7 @@ export default function Profissional({navigation}) {
 //OPEN and EXIT {
     const entrar = () => {
         handleSignIn();
-        if(code == "12345678" && email ==  "apodef@gmail.com"){
+        if(code == "admin" && email ==  "admin@gmail.com"){
             navigation.reset({
                 index: 0,
                 routes: [{name: "Home"}],
