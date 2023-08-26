@@ -23,7 +23,7 @@ export default function Paciente({ navigation }) {
 //OPEN and EXIT {
   const open = ()=>{
     handleSignIn();
-    if (name !== '') {
+    if (name !== '' && code !== '') {
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
@@ -110,6 +110,7 @@ export default function Paciente({ navigation }) {
   // Esconder topView
   const [shouldShow, setshouldShow] = useState(true);
 
+  //--------------------------------------------------------------------------------------------------
   return (
     <KeyboardAvoidingView style={styles.background}>
       

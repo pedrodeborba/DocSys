@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesome5 } from 'react-native-vector-icons';
-
 import {
     StyleSheet,
     Text,
     View,
     SafeAreaView,
     TouchableOpacity,
-    ScrollView
+    Modal
 } from 'react-native';
+import { ModalPicker} from '../../../components/ModalPicker';
 
 export default function Agendar() {
+
+//  Dropdown data {
+    const [chooseData, setchooseData] = useState('Selecione o mês...');
+    const [isModalVisible, setisModalVisible] = useState(false);
+
+    const changeModalVisibility = (bool) => {
+        setisModalVisible(bool);
+    }
+
+    const setData = (option) => {
+        setchooseData(option);
+    }
+//  }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.topView}>
@@ -19,17 +33,28 @@ export default function Agendar() {
 
             <View style={styles.section}>
                 <View>
-                    <TouchableOpacity style={styles.buttonData}>
-                        <View>
-                            <FontAwesome5 name="calendar" size={25} color="#203F6B" />
-                        </View>
-                        <View>
-                            <Text style={styles.textData}>Julho</Text>
-                        </View>
-                        <View>
-                            <FontAwesome5 name="chevron-down" size={25} color="#203F6B" />
-                        </View>
+                    <TouchableOpacity 
+                        onPress={() => changeModalVisibility(true)}
+                        style={styles.buttonData}
+                    >
+                        <Text style={styles.textData}>
+                            {chooseData}
+                        </Text>
+
+                        <FontAwesome5 name="chevron-down" size={23} color="#203F6B"/>
                     </TouchableOpacity>
+                    <Modal
+                        transparent={true}
+                        animationType='fade'
+                        visible={isModalVisible}
+                        nRequestClose={() => changeModalVisibility(false)}
+                    >
+                        <ModalPicker
+                            changeModalVisibility = {changeModalVisibility}
+                            setData={setData}
+                        />
+                    </Modal>
+                    
 
                     <View style={styles.datas}>
                         <View style={styles.lineDatas}>
@@ -93,11 +118,6 @@ export default function Agendar() {
                         </View>
                     </View>
                 </View>
-                <View style={{marginTop: 5}}>
-                    <Text style={{ color: "#203F6B", textDecorationLine: 'underline' }}>
-                        Ver mais datas
-                    </Text>
-                </View>
             </View>
 
             {/* Section 2 */}
@@ -108,10 +128,10 @@ export default function Agendar() {
                             <FontAwesome5 name="calendar" size={25} color="#203F6B" />
                         </View>
                         <View>
-                            <Text style={styles.textData}>Hora</Text>
+                            <Text style={styles.textHora}>Horário</Text>
                         </View>
                     </TouchableOpacity>
-
+                    
                     <View style={styles.datas}>
                         <View style={styles.lineDatas}>
                             {/* Adicionar as datas (segunda, terça, quarta) */}
@@ -206,14 +226,13 @@ const styles = StyleSheet.create({
         paddingBottom: 60
     },
     buttonData: {
-        width: 150,
-        height: 40,
         backgroundColor: "#EDEFFF",
+        alignSelf: 'stretch',
         flexDirection: "row",
-        gap: 20,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
         borderRadius: 10,
-        justifyContent: "center",
-        alignItems: "center",
     },
     buttonHora:{
         width: 120,
@@ -227,6 +246,11 @@ const styles = StyleSheet.create({
     },
     textData: {
         color: "#203F6B",
+        marginVertical: 20,
+        fontSize: 15
+    },
+    textHora:{
+        color: "#203F6B"
     },
     datas: {
         width: "80%",
