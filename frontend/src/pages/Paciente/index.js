@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Ionicons} from 'react-native-vector-icons'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {
   StyleSheet,
@@ -17,21 +18,33 @@ export default function Paciente({ navigation }) {
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
 
-  function handleSignIn () {
-    const resp = axios.post('http://192.168.1.22:3001/paciente', {name, code}).then(result => console.log(result)).catch(err => console.log(err));
+  function handleSignIn() {
+    axios.post('http://192.168.1.22:3001/paciente', { name, code })
+      .then(result => {
+        console.log(result);
+        // Armazena o nome do paciente no AsyncStorage
+        AsyncStorage.setItem('userName', name);
+        // Navega para a tela Home após o login bem-sucedido
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
+      })
+      .catch(err => console.log(err));
   }
+  
 //OPEN and EXIT {
-  const open = ()=>{
-    handleSignIn();
+  const open = () => {
     if (name !== '' && code !== '') {
+      handleSignIn();
       navigation.reset({
         index: 0,
         routes: [{ name: 'Home' }],
       });
     } else {
-      alert('Informe o código correto!');
+      alert('Preencha os campos corretamente!');
     }
-  };
+  };  
 
   const exit = ()=>{
     navigation.reset({

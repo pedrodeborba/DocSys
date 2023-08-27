@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   StyleSheet,
   Text,
@@ -12,11 +13,9 @@ import {
   TextInput
 } from "react-native";
 
-//Pegar informações do banco de dados
-const nome = 'Pedro';
-const idade = 18;
-const email = 'admin@gmail.com';
-
+const nome = "";
+const idade = "";
+const email = '@gmail.com';
 
 // Configurando FlatList
 const DATA = [
@@ -31,8 +30,35 @@ export default function Perfil({ navigation }) {
     const [isModalVisible, setisModalVisible] = useState(false);
     const [inputText, setinputText] = useState();
     const [editItem, seteditItem] = useState();
-    const [nomePerfil, setNomePerfil] = useState(nome); // Estado para armazenar o nome exibido abaixo da imagem de perfil
+    const [nomePerfil, setNomePerfil] = useState(); // Estado para armazenar o nome exibido abaixo da imagem de perfil
   
+    // Recuperar dados do AsyncStorage
+    useEffect(() => {
+      const retrieveUserName = async () => {
+        try {
+          const storedUserName = await AsyncStorage.getItem('userName');
+          if (storedUserName) {
+            setNomePerfil(storedUserName);
+    
+            // Atualizar o nome na lista de dados
+            const newData = data.map((item) => {
+              if (item.id === 1) {
+                item.text = storedUserName;
+              }
+              return item;
+            });
+            setdata(newData);
+            setisRender(!isRender);
+          }
+        } catch (error) {
+          console.error('Erro ao recuperar o nome do usuário:', error);
+        }
+      };
+    
+      retrieveUserName();
+    }, []);
+    
+
     const onPressItem = (item) => {
       setisModalVisible(true);
       setinputText(item.text);
@@ -79,10 +105,21 @@ export default function Perfil({ navigation }) {
       }
     };
   
-    const onPressSaveEdit = () => {
+    const onPressSaveEdit = async () => {
       handleEditItem(editItem);
       setisModalVisible(false);
+    
+      // Salvar os dados editados no AsyncStorage
+      try {
+        if (editItem === 1) {
+          await AsyncStorage.setItem('userName', inputText);
+          setNomePerfil(inputText);
+        }
+      } catch (error) {
+        console.error('Erro ao salvar os dados:', error);
+      }
     };
+    
 
 //LOGOUT {
     const logout = ()=>{

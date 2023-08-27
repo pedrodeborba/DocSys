@@ -1,15 +1,37 @@
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView, TouchableOpacity} from 'react-native';
-import {FontAwesome} from 'react-native-vector-icons'
-import {MaterialCommunityIcons} from 'react-native-vector-icons'
+import {FontAwesome} from 'react-native-vector-icons';
+import {MaterialCommunityIcons} from 'react-native-vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({navigation}) {
 
+    const [userName, setUserName] = useState('');
+
+    useEffect(() => {
+    const retrieveUserName = async () => {
+        try {
+        const storedUserName = await AsyncStorage.getItem('userName');
+        if (storedUserName) {
+            setUserName(storedUserName);
+        }
+        } catch (error) {
+        console.error('Erro ao recuperar o nome do usuário:', error);
+        }
+    };
+
+    retrieveUserName();
+    }, []);
+  
+    useEffect(() => {
+    }, [userName]);
+
     const agendar = () => {
         navigation.reset({
-            index: 0,
-            routes: [{name: "Agendamento"}],
-        })
-    }
+          index: 0,
+          routes: [{ name: 'Agendamento' }],
+        });
+    };
 
     return(
         <SafeAreaView style={styles.body}>
@@ -19,7 +41,7 @@ export default function Home({navigation}) {
                 style={{width:60, height: 60, marginLeft: 0}}
                 />
                 <Text style={styles.headerText}>
-                    Olá, Pedro{'\n'}
+                    Olá, {userName}{'\n'}
                     <Text style={styles.headerbText}>Do que você precisa?</Text>
                 </Text>
                 <FontAwesome name="bell-o" size={23} color="#6F7BF7" style={{marginLeft:45}} />
@@ -82,7 +104,6 @@ export default function Home({navigation}) {
                     </View>
                 </View>
             </ScrollView>
-            {/*Colocar o Bottom tab bar*/}
         </SafeAreaView>
     )
 }
@@ -213,7 +234,5 @@ const styles = StyleSheet.create({
         color:"#6F7BF7",
         marginLeft: 40,
     },
-
-    
 })
 

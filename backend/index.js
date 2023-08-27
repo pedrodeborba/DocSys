@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const express = require ('express');
-const cors = require ('cors'); //
+const cors = require ('cors'); 
 const pacienteModel = require ('./models/paciente');
 
 const app = express();
@@ -32,6 +32,20 @@ app.post('/paciente', (req,res) => {
     }
   });
 
+});
+
+app.get('/paciente', (req, res) => {
+  const { name } = req.query;
+
+  pacienteModel.findOne({ name: name }).then(paciente => {
+    if (paciente) {
+      res.json(paciente);
+    } else {
+      res.json({ msg: 'Paciente não encontrado' });
+    }
+  }).catch(err => {
+    res.status(500).json({ error: 'Erro ao buscar paciente', details: err.message });
+  });
 });
 
 app.listen(3001, () => {
