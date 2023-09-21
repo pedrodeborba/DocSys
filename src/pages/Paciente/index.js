@@ -13,13 +13,14 @@ import {
   Keyboard,
   LogBox,
 } from 'react-native';
+import { BACKEND_URL } from '@env';
 
 export default function Paciente({ navigation }) {
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
 
   function handleSignIn() {
-    axios.post('http://192.168.1.22:3001/paciente', { name, code })
+    axios.post(`${BACKEND_URL}/paciente`, { name, code })
       .then(result => {
         console.log(result);
         // Armazena o nome do paciente no AsyncStorage
