@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import {Ionicons} from 'react-native-vector-icons'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { Ionicons } from "react-native-vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { BACKEND_URL } from "@env";
 import {
   StyleSheet,
   Text,
@@ -12,49 +13,52 @@ import {
   Animated,
   Keyboard,
   LogBox,
-} from 'react-native';
-import { BACKEND_URL } from '@env';
+} from "react-native";
 
 export default function Paciente({ navigation }) {
-  const [name, setName] = useState('');
-  const [code, setCode] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function handleSignIn() {
-    axios.post(`${BACKEND_URL}/paciente`, { name, code })
-      .then(result => {
-        console.log(result);
-        // Armazena o nome do paciente no AsyncStorage
-        AsyncStorage.setItem('userName', name);
-        // Navega para a tela Home após o login bem-sucedido
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home' }],
-        });
-      })
-      .catch(err => console.log(err));
-  }
-  
-//OPEN and EXIT {
+  const handleSignIn = async () => {
+    try {
+      const response = await axios.post(`${BACKEND_URL}/patients`, {
+        name,
+        email,
+        password,
+      });
+      console.log(response.data);
+      AsyncStorage.setItem("userName", name);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Home" }],
+      });
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+    }
+  };
+
+  //OPEN and EXIT {
   const open = () => {
-    if (name !== '' && code !== '') {
+    if (name && email && password) {
       handleSignIn();
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Home' }],
+        routes: [{ name: "Home" }],
       });
     } else {
-      alert('Preencha os campos corretamente!');
+      alert("Preencha todos os campos corretamente!");
     }
-  };  
+  };
 
-  const exit = ()=>{
+  const exit = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: "FirstScreen"}]
+      routes: [{ name: "FirstScreen" }],
     });
-  }
+  };
 
-// }
+  // }
 
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }));
   const [opacity] = useState(new Animated.Value(0));
@@ -62,14 +66,14 @@ export default function Paciente({ navigation }) {
   const [logoSizeAnimated] = useState(new Animated.Value(200));
 
   useEffect(() => {
-    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+    LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
 
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      "keyboardDidShow",
       keyboardDidShow
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
+      "keyboardDidHide",
       keyboardDidHide
     );
 
@@ -78,10 +82,12 @@ export default function Paciente({ navigation }) {
         toValue: 0,
         speed: 4,
         bounciness: 20,
+        useNativeDriver: false,
       }),
       Animated.timing(opacity, {
         toValue: 1,
         duration: 250,
+        useNativeDriver: false,
       }),
     ]).start();
 
@@ -96,15 +102,18 @@ export default function Paciente({ navigation }) {
       Animated.timing(logoAnimated.x, {
         toValue: 145,
         duration: 100,
+        useNativeDriver: false,
       }),
       Animated.timing(logoAnimated.y, {
         toValue: 145,
         duration: 100,
+        useNativeDriver: false,
       }),
       Animated.timing(logoSizeAnimated, {
         toValue: 150,
         duration: 100,
-      })
+        useNativeDriver: false,
+      }),
     ]).start();
   }
 
@@ -121,26 +130,22 @@ export default function Paciente({ navigation }) {
     ]).start();
   }
 
-  // Esconder topView
-  const [shouldShow, setshouldShow] = useState(true);
-
   //--------------------------------------------------------------------------------------------------
   return (
     <KeyboardAvoidingView style={styles.background}>
-      
       <View style={styles.topView}>
         <TouchableOpacity onPress={exit}>
           <Ionicons name="ios-arrow-back" size={24} color="#6F7BF7" />
         </TouchableOpacity>
       </View>
-       
+
       <View style={styles.logo}>
         <Animated.Image
           style={{
             width: logoAnimated.x,
             height: logoAnimated.y,
           }}
-          source={require('../../../assets/logo.png')}
+          source={require("../../../assets/logo.png")}
         />
       </View>
 
@@ -149,7 +154,7 @@ export default function Paciente({ navigation }) {
           styles.container,
           {
             opacity: opacity,
-            transform: [{ translateY: offset.y}],
+            transform: [{ translateY: offset.y }],
           },
         ]}
       >
@@ -163,10 +168,18 @@ export default function Paciente({ navigation }) {
 
         <TextInput
           style={styles.input}
-          placeholder="Código"
+          placeholder="Email"
           autoCorrect={false}
-          onChangeText={setCode}
-          value={code}
+          onChangeText={setEmail}
+          value={email}
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Senha"
+          autoCorrect={false}
+          onChangeText={setPassword}
+          value={password}
           secureTextEntry={true}
         />
 
@@ -180,16 +193,16 @@ export default function Paciente({ navigation }) {
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: '#D8DDFC',
+    backgroundColor: "#D8DDFC",
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   topView: {
     height: "10%",
-    width: '100%',
+    width: "100%",
     alignItems: "center",
-    flexDirection: 'row',
+    flexDirection: "row",
     rowGap: 20,
     paddingTop: 20,
     paddingLeft: 10,
@@ -200,39 +213,39 @@ const styles = StyleSheet.create({
   },
   logo: {
     flex: 1,
-    backgroundColor: '#6F7BF7',
+    backgroundColor: "#6F7BF7",
     borderRadius: 20,
-    justifyContent: 'center',
+    justifyContent: "center",
     alignItems: "center",
     marginBottom: 30,
-    marginTop: 30
+    marginTop: 30,
   },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '90%',
+    alignItems: "center",
+    justifyContent: "center",
+    width: "90%",
     paddingBottom: 5,
   },
   input: {
-    backgroundColor: '#fff',
-    width: '90%',
+    backgroundColor: "#fff",
+    width: "90%",
     marginBottom: 15,
-    color: '#222',
+    color: "#222",
     fontSize: 17,
     borderRadius: 5,
     padding: 10,
   },
   btn: {
-    backgroundColor: '#6F7BF7',
-    width: '90%',
+    backgroundColor: "#6F7BF7",
+    width: "90%",
     height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 5,
   },
   btnText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 18,
   },
 });

@@ -58,10 +58,12 @@ export default function Profissional({navigation}) {
             toValue:0,
             speed:4,
             bounciness:20,
+            useNativeDriver: false,
         }),
         Animated.timing(opacity,{
             toValue:1,
             duration:200,
+            useNativeDriver: false,
         })
         ]).start();
     },[]);
@@ -71,10 +73,12 @@ export default function Profissional({navigation}) {
         Animated.timing(logoAnimated.x, {
             toValue: 130,
             duration:100,
+            useNativeDriver: false,
         }),
         Animated.timing(logoAnimated.y, {
             toValue: 145,
             duration:100,
+            useNativeDriver: false,
         })
         ]).start();
     }
@@ -84,10 +88,12 @@ export default function Profissional({navigation}) {
         Animated.timing(logoAnimated.x, {
             toValue: 250,
             duration:100,
+            useNativeDriver: false,
         }),
         Animated.timing(logoAnimated.y, {
             toValue: 200,
             duration:100,
+            useNativeDriver: false,
         })
         ]).start();
     }

@@ -117,12 +117,18 @@ export default function App() {
         <Stack.Screen
           name="Paciente"
           component={Paciente}
-          options={{ headerShown: false }}
+          options={{ 
+            headerShown: false,
+            animationEnabled: true, 
+          }}
         />
         <Stack.Screen
           name="Profissional"
           component={Profissional}
-          options={{ headerShown: false }}
+          options={{ 
+            headerShown: false,
+            animationEnabled: true, 
+          }}
         />
         <Stack.Screen
           name="Home"
