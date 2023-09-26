@@ -15,7 +15,7 @@ import {
   LogBox,
 } from "react-native";
 
-export default function Paciente({ navigation }) {
+export default function Patient({ navigation }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -13,7 +13,7 @@ import {
    LogBox,
    } from 'react-native';
 
-export default function Profissional({navigation}) {
+export default function Admin({navigation}) {
 
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
@@ -24,7 +24,7 @@ export default function Profissional({navigation}) {
     }
 
 //OPEN and EXIT {
-    const entrar = () => {
+    const signIn = () => {
         handleSignIn();
         if(code == "admin" && email ==  "admin@gmail.com"){
             navigation.reset({
@@ -144,7 +144,7 @@ export default function Profissional({navigation}) {
             secureTextEntry={true}
             />
 
-            <TouchableOpacity style={styles.btn} onPress={()=> entrar()}>
+            <TouchableOpacity style={styles.btn} onPress={()=> signIn()}>
             <Text style={styles.btnText}>
                 Entrar
             </Text>

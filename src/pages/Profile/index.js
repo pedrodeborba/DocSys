@@ -24,13 +24,13 @@ const DATA = [
   { id: 3, text: `${email}` },
 ]
 
-export default function Perfil({ navigation }) {
+export default function Profile({ navigation }) {
     const [data, setdata] = useState(DATA);
     const [isRender, setisRender] = useState(false);
     const [isModalVisible, setisModalVisible] = useState(false);
     const [inputText, setinputText] = useState();
     const [editItem, seteditItem] = useState();
-    const [nomePerfil, setNomePerfil] = useState(); // Estado para armazenar o nome exibido abaixo da imagem de perfil
+    const [nameProfile, setnameProfile] = useState(); // Estado para armazenar o nome exibido abaixo da imagem de perfil
   
     // Recuperar dados do AsyncStorage
     useEffect(() => {
@@ -38,7 +38,7 @@ export default function Perfil({ navigation }) {
         try {
           const storedUserName = await AsyncStorage.getItem('userName');
           if (storedUserName) {
-            setNomePerfil(storedUserName);
+            setnameProfile(storedUserName);
     
             // Atualizar o nome na lista de dados
             const newData = data.map((item) => {
@@ -101,7 +101,7 @@ export default function Perfil({ navigation }) {
       setisRender(!isRender);
   
       if (editItem === 1) {
-        setNomePerfil(inputText);
+        setnameProfile(inputText);
       }
     };
   
@@ -113,28 +113,24 @@ export default function Perfil({ navigation }) {
       try {
         if (editItem === 1) {
           await AsyncStorage.setItem('userName', inputText);
-          setNomePerfil(inputText);
+          setnameProfile(inputText);
         }
       } catch (error) {
         console.error('Erro ao salvar os dados:', error);
       }
     };
     
-
-//LOGOUT {
     const logout = ()=>{
       navigation.reset({
         index: 0,
         routes: [{name: "FirstScreen"}]
       });
     }
-// }
+
   
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.titleBar}>
-          <Ionicons name="ios-arrow-back" size={24} color="#52575D" />
-
           <TouchableOpacity onPress={logout}>
             <MaterialIcons name="logout" size={24} color="#52575D" />
           </TouchableOpacity>
@@ -162,10 +158,10 @@ export default function Perfil({ navigation }) {
         </View>
   
         <View style={styles.infoContainer}>
-          <Text style={[styles.perfilText, { fontWeight: "200", fontSize: 36 }]}>
-            {nomePerfil}
+          <Text style={[styles.profileText, { fontWeight: "200", fontSize: 36 }]}>
+            {nameProfile}
           </Text>
-          <Text style={[styles.perfilText, { color: "#AEB5BC", fontSize: 14 }]}>
+          <Text style={[styles.profileText, { color: "#AEB5BC", fontSize: 14 }]}>
             Admin
           </Text>
         </View>
@@ -210,7 +206,7 @@ export default function Perfil({ navigation }) {
       flex: 1,
       backgroundColor: "#FFF",
     },
-    perfilText: {
+    profileText: {
       color: "#52575D",
     },
     image: {
@@ -219,8 +215,6 @@ export default function Perfil({ navigation }) {
       width: undefined,
     },
     titleBar: {
-      flexDirection: "row",
-      justifyContent: "space-between",
       marginTop: 24,
       marginHorizontal: 16,
     },

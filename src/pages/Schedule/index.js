@@ -12,7 +12,7 @@ import Calendar from "react-native-calendars/src/calendar";
 
 const times = ["08:00", "09:00", "10:00", "16:00", "17:00", "18:00"];
 
-export default function Agendar() {
+export default function Schedule() {
   //calendar
   const [showModal, setShowModal] = useState(false);
   const [chosenTime, setChosenTime] = useState(null);
@@ -29,7 +29,7 @@ export default function Agendar() {
     setChosenTime(time);
   };
 
-  const handleAgendar = () => {
+  const handleSchedule = () => {
     if (selectedDate && chosenTime) {
         handleTimeSelection(null); //Ao clicar em 'Agendar', o horário se torna nullo novamente
         console.log("Consulta agendada:", selectedDate, `, {time: ${chosenTime}}`);//Mostrando objetos {date,time}
@@ -132,10 +132,10 @@ export default function Agendar() {
             </View>
           </View>
         </View>
-        <View style={styles.divAgendar}>
+        <View style={styles.divSchedule}>
           <TouchableOpacity
-            style={styles.buttonAgendar}
-            onPress={handleAgendar}
+            style={styles.buttonSchedule}
+            onPress={handleSchedule}
           >
             <FontAwesome5
               name="check"
@@ -143,11 +143,11 @@ export default function Agendar() {
               color="#fff"
               style={{ marginLeft: 45 }}
             />
-            <Text style={styles.textAgendar}>Agendar</Text>
+            <Text style={styles.textSchedule}>Agendar</Text>
           </TouchableOpacity>
 
           {showValidationMessage && (
-            <Text style={styles.errorValidationText}>Selecione todas as opções para agendar!</Text>
+            <Text style={styles.errorValidationText}>Selecione todas as opções para Schedule!</Text>
           )}
 
             {completeValidation && (
@@ -237,12 +237,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "#203F6B",
   },
-  divAgendar: {
+  divSchedule: {
     width: "100%",
     height: 50,
     alignItems: "center",
   },
-  buttonAgendar: {
+  buttonSchedule: {
     width: "60%",
     height: 50,
     alignItems: "center",
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flexDirection: "row",
   },
-  textAgendar: {
+  textSchedule: {
     color: "#fff",
     fontSize: 20,
   },

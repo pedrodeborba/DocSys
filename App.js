@@ -9,11 +9,11 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 //Screens
 import FirstScreen from "./src/pages/FirstScreen";
-import Paciente from "./src/pages/Paciente";
-import Profissional from "./src/pages/Profissional";
+import Patient from "./src/pages/Patient";
+import Admin from "./src/pages/Admin";
 import Home from "./src/pages/Home";
-import Agendamento from "./src/pages/Agendamento";
-import Perfil from "./src/pages/Perfil";
+import Schedule from "./src/pages/Schedule";
+import Profile from "./src/pages/Profile";
 import List from "./src/pages/List";
 
 //Bottom Tab Navigator
@@ -55,7 +55,7 @@ export function TabNavigator() {
 
       <Tab.Screen
         name="Agendamento"
-        component={Agendamento}
+        component={Schedule}
         options={{
           headerShown: false,
 
@@ -84,7 +84,7 @@ export function TabNavigator() {
 
       <Tab.Screen
         name="Perfil"
-        component={Perfil}
+        component={Profile}
         options={{
           headerShown: false,
 
@@ -109,23 +109,23 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="List">
+      <Stack.Navigator initialRouteName="FirstScreen">
         <Stack.Screen
           name="FirstScreen"
           component={FirstScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Paciente"
-          component={Paciente}
+          name="Patient"
+          component={Patient}
           options={{ 
             headerShown: false,
             animationEnabled: true, 
           }}
         />
         <Stack.Screen
-          name="Profissional"
-          component={Profissional}
+          name="Admin"
+          component={Admin}
           options={{ 
             headerShown: false,
             animationEnabled: true, 

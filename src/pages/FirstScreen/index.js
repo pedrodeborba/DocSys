@@ -4,16 +4,16 @@ import { View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 
 export default function FirstScreen({navigation}) {
-    const ProfisEnter = () => {
+    const adminSignIn = () => {
         navigation.reset({
             index: 0,
-            routes: [{name: "Profissional"}],
+            routes: [{name: "Admin"}],
         })
     }
-    const PaciEnter = () => {
+    const patientSignIn = () => {
         navigation.reset({
             index: 0,
-            routes: [{name: "Paciente"}],
+            routes: [{name: "Patient"}],
         })
     }
 
@@ -23,10 +23,10 @@ export default function FirstScreen({navigation}) {
                 <Image source={require('../../../assets/logo.png')} style={styles.img}/>
             </View>
             <Text style={styles.textP}>Escolha o tipo de usuário</Text>
-            <TouchableOpacity style={styles.button} onPress={()=>ProfisEnter()}>
+            <TouchableOpacity style={styles.button} onPress={()=> adminSignIn()}>
                 <Text style={styles.textButton}>Fisioterapeuta</Text>
             </TouchableOpacity>
-            <TouchableOpacity title="Sou Paciente" style={styles.button} onPress={()=>PaciEnter()}>
+            <TouchableOpacity title="Sou Paciente" style={styles.button} onPress={()=> patientSignIn()}>
                 <Text style={styles.textButton}>Paciente</Text>
             </TouchableOpacity>
         </View>
