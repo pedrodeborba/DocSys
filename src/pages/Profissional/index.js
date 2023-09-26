@@ -29,7 +29,7 @@ export default function Profissional({navigation}) {
         if(code == "admin" && email ==  "admin@gmail.com"){
             navigation.reset({
                 index: 0,
-                routes: [{name: "Home"}],
+                routes: [{name: "List"}],
             })
         }else alert("Email e/ou senha incorretos!");
     }

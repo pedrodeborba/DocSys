@@ -13,7 +13,8 @@ import Paciente from "./src/pages/Paciente";
 import Profissional from "./src/pages/Profissional";
 import Home from "./src/pages/Home";
 import Agendamento from "./src/pages/Agendamento";
-import Perfil from "./src/pages/Perfil"
+import Perfil from "./src/pages/Perfil";
+import List from "./src/pages/List";
 
 //Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -108,7 +109,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="FirstScreen">
+      <Stack.Navigator initialRouteName="List">
         <Stack.Screen
           name="FirstScreen"
           component={FirstScreen}
@@ -129,6 +130,11 @@ export default function App() {
             headerShown: false,
             animationEnabled: true, 
           }}
+        />
+        <Stack.Screen
+          name="List"
+          component={List}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Home"
