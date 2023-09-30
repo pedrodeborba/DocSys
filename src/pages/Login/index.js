@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Ionicons } from "react-native-vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { BACKEND_URL } from "@env";
@@ -15,20 +14,17 @@ import {
   LogBox,
 } from "react-native";
 
-export default function Patient({ navigation }) {
-  const [name, setName] = useState("");
+export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignIn = async () => {
     try {
       const response = await axios.post(`${BACKEND_URL}/patients`, {
-        name,
         email,
         password,
       });
       console.log(response.data);
-      AsyncStorage.setItem("userName", name);
       navigation.reset({
         index: 0,
         routes: [{ name: "Home" }],
@@ -38,9 +34,8 @@ export default function Patient({ navigation }) {
     }
   };
 
-  //OPEN and EXIT {
   const open = () => {
-    if (name && email && password) {
+    if (email && password) {
       handleSignIn();
       navigation.reset({
         index: 0,
@@ -50,15 +45,6 @@ export default function Patient({ navigation }) {
       alert("Preencha todos os campos corretamente!");
     }
   };
-
-  const exit = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "FirstScreen" }],
-    });
-  };
-
-  // }
 
   const [offset] = useState(new Animated.ValueXY({ x: 0, y: 95 }));
   const [opacity] = useState(new Animated.Value(0));
@@ -100,12 +86,12 @@ export default function Patient({ navigation }) {
   function keyboardDidShow() {
     Animated.parallel([
       Animated.timing(logoAnimated.x, {
-        toValue: 145,
+        toValue: 150,
         duration: 100,
         useNativeDriver: false,
       }),
       Animated.timing(logoAnimated.y, {
-        toValue: 145,
+        toValue: 150,
         duration: 100,
         useNativeDriver: false,
       }),
@@ -122,10 +108,12 @@ export default function Patient({ navigation }) {
       Animated.timing(logoAnimated.x, {
         toValue: 250,
         duration: 100,
+        useNativeDriver: false,
       }),
       Animated.timing(logoAnimated.y, {
-        toValue: 200,
+        toValue: 250,
         duration: 100,
+        useNativeDriver: false,
       }),
     ]).start();
   }
@@ -133,12 +121,6 @@ export default function Patient({ navigation }) {
   //--------------------------------------------------------------------------------------------------
   return (
     <KeyboardAvoidingView style={styles.background}>
-      <View style={styles.topView}>
-        <TouchableOpacity onPress={exit}>
-          <Ionicons name="ios-arrow-back" size={24} color="#6F7BF7" />
-        </TouchableOpacity>
-      </View>
-
       <View style={styles.logo}>
         <Animated.Image
           style={{
@@ -158,14 +140,6 @@ export default function Patient({ navigation }) {
           },
         ]}
       >
-        <TextInput
-          style={styles.input}
-          placeholder="Nome Completo"
-          autoCorrect={false}
-          onChangeText={setName}
-          value={name}
-        />
-
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -197,19 +171,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  },
-  topView: {
-    height: "10%",
-    width: "100%",
-    alignItems: "center",
-    flexDirection: "row",
-    rowGap: 20,
-    paddingTop: 20,
-    paddingLeft: 10,
-  },
-  textTopView: {
-    fontSize: 25,
-    color: "#fff",
   },
   logo: {
     flex: 1,

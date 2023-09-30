@@ -8,13 +8,10 @@ import { Ionicons } from "react-native-vector-icons";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 
 //Screens
-import FirstScreen from "./src/pages/FirstScreen";
-import Patient from "./src/pages/Patient";
-import Admin from "./src/pages/Admin";
+import Login from "./src/pages/Login";
 import Home from "./src/pages/Home";
 import Schedule from "./src/pages/Schedule";
 import Profile from "./src/pages/Profile";
-import List from "./src/pages/List";
 
 //Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
@@ -109,32 +106,14 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="FirstScreen">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
-          name="FirstScreen"
-          component={FirstScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Patient"
-          component={Patient}
+          name="Login"
+          component={Login}
           options={{ 
             headerShown: false,
             animationEnabled: true, 
           }}
-        />
-        <Stack.Screen
-          name="Admin"
-          component={Admin}
-          options={{ 
-            headerShown: false,
-            animationEnabled: true, 
-          }}
-        />
-        <Stack.Screen
-          name="List"
-          component={List}
-          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="Home"
