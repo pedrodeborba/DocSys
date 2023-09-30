@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { BACKEND_URL } from "@env";
+import { BACKEND_URL, LOCAL_URL } from "@env";
 import {
   StyleSheet,
   Text,
@@ -18,31 +18,31 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = async () => {
+  const handleLogin = async () => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/patients`, {
+      const response = await axios.post(`${BACKEND_URL}/login`, {
         email,
         password,
       });
-      console.log(response.data);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Home" }],
-      });
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-    }
-  };
 
-  const open = () => {
-    if (email && password) {
-      handleSignIn();
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Home" }],
-      });
-    } else {
-      alert("Preencha todos os campos corretamente!");
+      console.log(response)
+  
+      if (response.status === 200 && response.data.message === "Login bem-sucedido") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Home" }],
+        });
+      } 
+      if (response.status === 401) {
+        alert("Algo deu errado, tente novamente mais tarde.");
+      }
+
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        alert("Credenciais inválidas. Verifique seu email e senha.");
+      } else {
+        console.error("Erro ao fazer login:", error);
+      }
     }
   };
 
@@ -118,7 +118,6 @@ export default function Login({ navigation }) {
     ]).start();
   }
 
-  //--------------------------------------------------------------------------------------------------
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.logo}>
@@ -157,7 +156,7 @@ export default function Login({ navigation }) {
           secureTextEntry={true}
         />
 
-        <TouchableOpacity style={styles.btn} onPress={open}>
+        <TouchableOpacity style={styles.btn} onPress={handleLogin}>
           <Text style={styles.btnText}>Entrar</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -179,7 +178,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 30,
-    marginTop: 30,
+    marginTop: 50,
   },
   container: {
     flex: 1,

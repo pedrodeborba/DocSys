@@ -123,7 +123,7 @@ export default function Profile({ navigation }) {
     const logout = ()=>{
       navigation.reset({
         index: 0,
-        routes: [{name: "FirstScreen"}]
+        routes: [{name: "Login"}]
       });
     }
 
