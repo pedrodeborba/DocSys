@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/login`, {
+      const response = await axios.post(`${LOCAL_URL}/login`, {
         email,
         password,
       });
@@ -32,6 +32,8 @@ export default function Login({ navigation }) {
           index: 0,
           routes: [{ name: "Home" }],
         });
+        // Salva o id do paciente no AsyncStorage
+        await AsyncStorage.setItem("patientId", response.data.patientId);
       } 
       if (response.status === 401) {
         alert("Algo deu errado, tente novamente mais tarde.");

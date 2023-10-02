@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { FontAwesome5 } from "react-native-vector-icons";
 import {
   StyleSheet,
@@ -9,6 +11,7 @@ import {
   Modal,
 } from "react-native";
 import Calendar from "react-native-calendars/src/calendar";
+import { BACKEND_URL, LOCAL_URL } from "@env";
 
 const times = ["08:00", "09:00", "10:00", "16:00", "17:00", "18:00"];
 
@@ -29,14 +32,38 @@ export default function Schedule() {
     setChosenTime(time);
   };
 
-  const handleSchedule = () => {
+  const handleSchedule = async () => {
     if (selectedDate && chosenTime) {
-        handleTimeSelection(null); //Ao clicar em 'Agendar', o horário se torna nullo novamente
-        console.log("Consulta agendada:", selectedDate, `, {time: ${chosenTime}}`);//Mostrando objetos {date,time}
-        setCompleteValidation(true); //Para exibir mensagem 'Consulta marcada'
-        setTimeout(() => {
+      try {
+        // Busca o id do paciente no AsyncStorage
+        const patientId = await AsyncStorage.getItem("patientId");
+        const response = await axios.post(`${LOCAL_URL}/schedule/${patientId}`, {
+          date: selectedDate,
+          time: chosenTime,
+        });
+
+        if (response.status === 201) {
+          // Consulta agendada com sucesso
+          handleTimeSelection(null); // Defina o horário como nulo novamente
+          console.log("Consulta agendada:", selectedDate, `, {time: ${chosenTime}}`);
+          setCompleteValidation(true); // Para exibir a mensagem 'Consulta marcada'
+          setTimeout(() => {
             setCompleteValidation(false);
           }, 5000);
+        } else {
+          console.error("Erro ao agendar consulta:", response.data.error);
+          setShowValidationMessage(true);
+          setTimeout(() => {
+            setShowValidationMessage(false);
+          }, 3000);
+        }
+      } catch (error) {
+        console.error("Erro ao agendar consulta:", error);
+        setShowValidationMessage(true);
+        setTimeout(() => {
+          setShowValidationMessage(false);
+        }, 3000);
+      }
     } else {
       console.log("Selecione todas as opções para agendar!");
       setShowValidationMessage(true);
