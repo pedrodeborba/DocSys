@@ -38,15 +38,19 @@ export default function Schedule() {
         // Busca o id do paciente no AsyncStorage
         const patientId = await AsyncStorage.getItem("patientId");
         const response = await axios.post(`${LOCAL_URL}/schedule/${patientId}`, {
-          date: selectedDate,
+          dateString: selectedDate.dateString,
+          day: selectedDate.day,
+          month: selectedDate.month,
+          timestamp: selectedDate.timestamp,
+          yaer: selectedDate.year,
           time: chosenTime,
+          patientId: patientId,
         });
-
+  
         if (response.status === 201) {
-          // Consulta agendada com sucesso
-          handleTimeSelection(null); // Defina o horário como nulo novamente
+          handleTimeSelection(null);
           console.log("Consulta agendada:", selectedDate, `, {time: ${chosenTime}}`);
-          setCompleteValidation(true); // Para exibir a mensagem 'Consulta marcada'
+          setCompleteValidation(true);
           setTimeout(() => {
             setCompleteValidation(false);
           }, 5000);
@@ -72,6 +76,7 @@ export default function Schedule() {
       }, 3000);
     }
   };
+  
 
   return (
     <SafeAreaView style={styles.container}>
