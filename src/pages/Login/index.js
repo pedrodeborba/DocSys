@@ -32,8 +32,9 @@ export default function Login({ navigation }) {
           index: 0,
           routes: [{ name: "Home" }],
         });
-        // Salva o id do paciente no AsyncStorage
         await AsyncStorage.setItem("patientId", response.data.patientId);
+        await AsyncStorage.setItem("patientName", response.data.patientName);
+        await AsyncStorage.setItem("patientSchedule", response.data.patientSchedule.toString());
       } 
       if (response.status === 401) {
         alert("Algo deu errado, tente novamente mais tarde.");

@@ -42,7 +42,7 @@ export default function Schedule() {
           day: selectedDate.day,
           month: selectedDate.month,
           timestamp: selectedDate.timestamp,
-          yaer: selectedDate.year,
+          year: selectedDate.year,
           time: chosenTime,
           patientId: patientId,
         });
