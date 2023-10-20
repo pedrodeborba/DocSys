@@ -35,9 +35,10 @@ export default function Schedule() {
   const handleSchedule = async () => {
     if (selectedDate && chosenTime) {
       try {
-        // Busca o id do paciente no AsyncStorage
         const patientId = await AsyncStorage.getItem("patientId");
+        const patientName = await AsyncStorage.getItem("patientName");
         const response = await axios.post(`${LOCAL_URL}/schedule/${patientId}`, {
+          patientName: patientName,
           dateString: selectedDate.dateString,
           day: selectedDate.day,
           month: selectedDate.month,
