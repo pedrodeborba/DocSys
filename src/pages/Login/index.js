@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/login`, {
+      const response = await axios.post("http://10.0.1.5:3002/login", {
         email,
         password,
       });

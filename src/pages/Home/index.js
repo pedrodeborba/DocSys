@@ -10,10 +10,14 @@ import {
 import { FontAwesome } from "react-native-vector-icons";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 
 export default function Home({ navigation }) {
   const [userName, setUserName] = useState("");
+  const [useDay, setUseDay] = useState("");
+  const [useMonth, setUseMonth] = useState("");
+  const[useTime, setUseTime] = useState("");
 
     useEffect(() => {
         const getUserName = async () => {
@@ -28,8 +32,51 @@ export default function Home({ navigation }) {
                 console.error("Erro ao recuperar o nome do usuário:", error);
             }
         };
+
+        const getUserDay = async () => {
+          try{
+            const day = await AsyncStorage.getItem("scheduleDay");
+            if(day) {
+              setUseDay(`${day}`);
+            } else{
+              console.log("Dia não encontrado")  
+            }
+          }catch(error){
+            console.error("Erro ao recuperar o dia do agendamento:", error);
+          }
+        };
+
+        const getUserMonth = async () => {
+          try{
+            const month = await AsyncStorage.getItem("scheduleMonth");
+            if(month) {
+              setUseMonth(`${month}`);
+            } else{
+              console.log("Mês não encontrado")  
+            }
+          }catch(error){
+            console.error("Erro ao recuperar o mês do agendamento:", error);
+          }
+        };
+
+        const getUserTime = async () => {
+          try{
+            const time = await AsyncStorage.getItem("scheduleTime");
+            if(time) {
+              setUseTime(`${time}`);
+            } else{
+              console.log("Hora não encontrada")  
+            }
+          }catch(error){
+            console.error("Erro ao recuperar a hora do agendamento:", error);
+          }
+        };
+
         getUserName();
-    }, []);
+        getUserDay();
+        getUserMonth();
+        getUserTime();
+      }, []);    
 
   const agendar = () => {
     navigation.reset({
@@ -81,7 +128,7 @@ export default function Home({ navigation }) {
                   color="#6F7BF7"
                   style={{ marginRight: 10 }}
                 />
-                <Text style={styles.optionsText}>18/07</Text>
+                <Text style={styles.optionsText}>{useDay}/{useMonth}</Text>
               </View>
               <View style={styles.options}>
                 <FontAwesome
@@ -90,7 +137,7 @@ export default function Home({ navigation }) {
                   color="#6F7BF7"
                   style={{ marginRight: 10 }}
                 />
-                <Text style={styles.optionsText}>17:15</Text>
+                <Text style={styles.optionsText}>{useTime}</Text>
               </View>
               <View style={styles.optionsEdit}>
                 <FontAwesome

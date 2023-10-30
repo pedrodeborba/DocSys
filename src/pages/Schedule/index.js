@@ -37,7 +37,7 @@ export default function Schedule() {
       try {
         const patientId = await AsyncStorage.getItem("patientId");
         const patientName = await AsyncStorage.getItem("patientName");
-        const response = await axios.post(`${LOCAL_URL}/schedule/${patientId}`, {
+        const response = await axios.post("http://10.0.1.5:3002/schedule/${patientId}", {
           patientName: patientName,
           dateString: selectedDate.dateString,
           day: selectedDate.day,
@@ -47,6 +47,12 @@ export default function Schedule() {
           time: chosenTime,
           patientId: patientId,
         });
+
+        await AsyncStorage.setItem("scheduleDay", selectedDate.day.toString());
+        await AsyncStorage.setItem("scheduleMonth", selectedDate.month.toString());
+        await AsyncStorage.setItem("scheduleTime", chosenTime);
+
+        console.log(selectedDate.day, selectedDate.month, chosenTime);
   
         if (response.status === 201) {
           handleTimeSelection(null);
@@ -56,7 +62,7 @@ export default function Schedule() {
             setCompleteValidation(false);
           }, 5000);
         } else {
-          console.error("Erro ao agendar consulta:", response.data.error);
+          console.error("Erro ao agendar:", response.data.error);
           setShowValidationMessage(true);
           setTimeout(() => {
             setShowValidationMessage(false);
