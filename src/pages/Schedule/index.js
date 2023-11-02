@@ -20,12 +20,13 @@ export default function Schedule() {
   const [showModal, setShowModal] = useState(false);
   const [chosenTime, setChosenTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [validationMessage, setValidationMessage] = useState("");
   const [showValidationMessage, setShowValidationMessage] = useState(false);
   const [completeValidation, setCompleteValidation] = useState(false);
 
   const handleDateSelection = (date) => {
-    setSelectedDate(date); // Atualiza o estado com a data selecionada
-    setShowModal(false); // Fecha o modal após a seleção da data
+    setSelectedDate(date);
+    setShowModal(false);
   };
 
   const handleTimeSelection = (time) => {
@@ -37,12 +38,10 @@ export default function Schedule() {
       try {
         const patientId = await AsyncStorage.getItem("patientId");
         const patientName = await AsyncStorage.getItem("patientName");
-        const response = await axios.post("http://10.0.1.5:3002/schedule/${patientId}", {
+        const response = await axios.post("http://192.168.1.27:3002/schedule/${patientId}", {
           patientName: patientName,
-          dateString: selectedDate.dateString,
           day: selectedDate.day,
           month: selectedDate.month,
-          timestamp: selectedDate.timestamp,
           year: selectedDate.year,
           time: chosenTime,
           patientId: patientId,
@@ -56,31 +55,22 @@ export default function Schedule() {
   
         if (response.status === 201) {
           handleTimeSelection(null);
-          console.log("Consulta agendada:", selectedDate, `, {time: ${chosenTime}}`);
           setCompleteValidation(true);
           setTimeout(() => {
             setCompleteValidation(false);
           }, 5000);
-        } else {
-          console.error("Erro ao agendar:", response.data.error);
-          setShowValidationMessage(true);
-          setTimeout(() => {
-            setShowValidationMessage(false);
-          }, 3000);
         }
       } catch (error) {
-        console.error("Erro ao agendar consulta:", error);
+        if (error.response && error.response.status === 400) {
+          setValidationMessage(error.response.data.error);
+        } else {
+          setValidationMessage("Erro ao agendar consulta. Selecione todas as opções para agendar!");
+        }
         setShowValidationMessage(true);
         setTimeout(() => {
           setShowValidationMessage(false);
         }, 3000);
       }
-    } else {
-      console.log("Selecione todas as opções para agendar!");
-      setShowValidationMessage(true);
-      setTimeout(() => {
-        setShowValidationMessage(false);
-      }, 3000);
     }
   };
   
@@ -186,12 +176,12 @@ export default function Schedule() {
           </TouchableOpacity>
 
           {showValidationMessage && (
-            <Text style={styles.errorValidationText}>Selecione todas as opções para Schedule!</Text>
+            <Text style={styles.errorValidationText}>{validationMessage}</Text>
           )}
 
-            {completeValidation && (
-                <Text style={styles.completeValidationText}>Consulta marcada!</Text>
-            )}
+          {completeValidation && (
+            <Text style={styles.completeValidationText}>Consulta marcada!</Text>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -310,8 +300,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   completeValidationText:{
-    color: "#00FF7F",
+    color: "#6F7BF7",
     fontSize: 25,
-    marginTop: 10,
+    marginTop: 20,
   }
 });

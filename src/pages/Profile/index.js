@@ -22,7 +22,6 @@ export default function Profile({ navigation }) {
   const [nameProfile, setnameProfile] = useState("");
   const [schedulesProfile, setschedulesProfile] = useState("");
 
-  // Recuperar dados do AsyncStorage
   useEffect(() => {
     const retrieveUserData = async () => {
       try {
@@ -38,7 +37,6 @@ export default function Profile({ navigation }) {
           setschedulesProfile(schedules);
         }
 
-        // Atualizar os dados na lista de dados
         const newData = [
           { id: 1, text: nameProfile || "" },
           { id: 2, text: schedulesProfile.toString() },
@@ -67,7 +65,7 @@ export default function Profile({ navigation }) {
         prefix = "Nome: ";
         break;
       case 1:
-        prefix = "Agendamentos: ";
+        prefix = "Consultas realizadas: ";
         break;
       default:
         break;
@@ -101,7 +99,6 @@ export default function Profile({ navigation }) {
     handleEditItem(editItem);
     setisModalVisible(false);
 
-    // Salvar os dados editados no AsyncStorage
     try {
       if (editItem === 1) {
         await AsyncStorage.setItem("patientName", inputText);
@@ -135,9 +132,6 @@ export default function Profile({ navigation }) {
             resizeMode="center"
           />
         </View>
-        <View style={styles.dm}>
-          <MaterialIcons name="edit" size={18} color="#fff" />
-        </View>
         <View style={styles.add}>
           <Ionicons
             name="ios-add"
@@ -149,11 +143,11 @@ export default function Profile({ navigation }) {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={[styles.profileText, { fontWeight: "200", fontSize: 36 }]}>
+        <Text style={[styles.profileText, { fontWeight: "200", fontSize: 30, paddingBottom: 50, paddingTop: 50 }]}>
           {nameProfile}
         </Text>
         <Text style={[styles.profileText, { color: "#AEB5BC", fontSize: 14 }]}>
-          Admin
+          Paciente
         </Text>
       </View>
 
@@ -214,16 +208,6 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 100,
     overflow: "hidden",
-  },
-  dm: {
-    backgroundColor: "#6F7BF7",
-    position: "absolute",
-    top: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
   },
   add: {
     backgroundColor: "#6F7BF7",
