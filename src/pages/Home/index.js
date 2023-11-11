@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -17,66 +17,49 @@ export default function Home({ navigation }) {
   const [userName, setUserName] = useState("");
   const [useDay, setUseDay] = useState("");
   const [useMonth, setUseMonth] = useState("");
-  const[useTime, setUseTime] = useState("");
+  const [useTime, setUseTime] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
 
-    useEffect(() => {
-        const getUserName = async () => {
-            try{
-                const name = await AsyncStorage.getItem("patientName");
-                if(name) {
-                    setUserName(`${name}`);
-                } else{
-                    console.log("Nome não encontrado")  
-                }         
-            }catch(error){
-                console.error("Erro ao recuperar o nome do usuário:", error);
-            }
-        };
+  const fetchUserProfileData = useCallback(async () => {
+    try {
+      const savedProfileImage = await AsyncStorage.getItem("profileImage");
+      if (savedProfileImage) {
+        setProfileImage(savedProfileImage);
+      }
 
-        const getUserDay = async () => {
-          try{
-            const day = await AsyncStorage.getItem("scheduleDay");
-            if(day) {
-              setUseDay(`${day}`);
-            } else{
-              console.log("Dia não encontrado")  
-            }
-          }catch(error){
-            console.error("Erro ao recuperar o dia do agendamento:", error);
-          }
-        };
+      const name = await AsyncStorage.getItem("patientName");
+      if (name) {
+        setUserName(name);
+      }
 
-        const getUserMonth = async () => {
-          try{
-            const month = await AsyncStorage.getItem("scheduleMonth");
-            if(month) {
-              setUseMonth(`${month}`);
-            } else{
-              console.log("Mês não encontrado")  
-            }
-          }catch(error){
-            console.error("Erro ao recuperar o mês do agendamento:", error);
-          }
-        };
+      const day = await AsyncStorage.getItem("scheduleDay");
+      if (day) {
+        setUseDay(day);
+      }
 
-        const getUserTime = async () => {
-          try{
-            const time = await AsyncStorage.getItem("scheduleTime");
-            if(time) {
-              setUseTime(`${time}`);
-            } else{
-              console.log("Hora não encontrada")  
-            }
-          }catch(error){
-            console.error("Erro ao recuperar a hora do agendamento:", error);
-          }
-        };
+      const month = await AsyncStorage.getItem("scheduleMonth");
+      if (month) {
+        setUseMonth(month);
+      }
 
-        getUserName();
-        getUserDay();
-        getUserMonth();
-        getUserTime();
-      }, []);    
+      const time = await AsyncStorage.getItem("scheduleTime");
+      if (time) {
+        setUseTime(time);
+      }
+    } catch (error) {
+      console.error("Erro ao recuperar dados do usuário:", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUserProfileData();
+
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchUserProfileData();
+    });
+
+    return unsubscribe;
+  }, [fetchUserProfileData, navigation]);    
 
   const agendar = () => {
     navigation.reset({
@@ -89,8 +72,8 @@ export default function Home({ navigation }) {
     <SafeAreaView style={styles.body}>
       <View style={styles.header}>
         <Image
-          source={require("../../../assets/perfil.png")}
-          style={{ width: 60, height: 60, marginLeft: 0 }}
+          source={profileImage ? { uri: profileImage } : require("../../../assets/perfil.png")}
+          style={{ width: 60, height: 60, marginLeft: 0, borderRadius: 50 }}
         />
         <Text style={styles.headerText}>
           Olá, {userName}

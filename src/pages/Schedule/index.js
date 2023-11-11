@@ -38,7 +38,7 @@ export default function Schedule() {
       try {
         const patientId = await AsyncStorage.getItem("patientId");
         const patientName = await AsyncStorage.getItem("patientName");
-        const response = await axios.post("http://192.168.1.27:3002/schedule/${patientId}", {
+        const response = await axios.post("http://192.168.255.86:3002/schedule/${patientId}", {
           patientName: patientName,
           day: selectedDate.day,
           month: selectedDate.month,

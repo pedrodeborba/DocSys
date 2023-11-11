@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 export default function Profile({ navigation }) {
   const [data, setdata] = useState([]);
@@ -21,12 +22,14 @@ export default function Profile({ navigation }) {
   const [editItem, seteditItem] = useState();
   const [nameProfile, setnameProfile] = useState("");
   const [schedulesProfile, setschedulesProfile] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     const retrieveUserData = async () => {
       try {
         const name = await AsyncStorage.getItem("patientName");
         const schedulesString = await AsyncStorage.getItem("patientSchedule");
+        const savedProfileImage = await AsyncStorage.getItem("profileImage");
 
         if (name) {
           setnameProfile(name);
@@ -35,6 +38,10 @@ export default function Profile({ navigation }) {
         if (schedulesString) {
           const schedules = parseInt(schedulesString, 10);
           setschedulesProfile(schedules);
+        }
+
+        if (savedProfileImage) {
+          setProfileImage(savedProfileImage);
         }
 
         const newData = [
@@ -51,6 +58,25 @@ export default function Profile({ navigation }) {
 
     retrieveUserData();
   }, [nameProfile, schedulesProfile]);
+
+  const pickImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+  
+      if (!result.canceled) {
+        setProfileImage(result.assets[0].uri);
+        // Salve a URI no AsyncStorage
+        await AsyncStorage.setItem("profileImage", result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error("Erro ao escolher a imagem da galeria:", error);
+    }
+  };
 
   const onPressItem = (item) => {
     setisModalVisible(true);
@@ -127,19 +153,19 @@ export default function Profile({ navigation }) {
       <View style={{ alignSelf: "center" }}>
         <View style={styles.profileImage}>
           <Image
-            source={require("../../../assets/perfil.png")}
+            source={profileImage ? { uri: profileImage } : require("../../../assets/perfil.png")}
             style={styles.image}
             resizeMode="center"
           />
         </View>
-        <View style={styles.add}>
+        <TouchableOpacity onPress={pickImage} style={styles.add}>
           <Ionicons
             name="ios-add"
             size={48}
             color="#fff"
             style={{ marginTop: 6, marginLeft: 2 }}
           />
-        </View>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.infoContainer}>
@@ -204,9 +230,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   profileImage: {
-    width: 200,
+    width: 250,
     height: 200,
-    borderRadius: 100,
+    borderRadius: 500,
     overflow: "hidden",
   },
   add: {
