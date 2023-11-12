@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { MaterialCommunityIcons, Ionicons, FontAwesome } from "react-native-vector-icons";
 import { fetchUserProfileData, toggleDarkMode, loadDarkMode } from "../../utils/asyncStorage";
@@ -19,6 +20,16 @@ export default function Home({ navigation }) {
   const [useMonth, setUseMonth] = useState("");
   const [useTime, setUseTime] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+
+  const openGoogleMaps = () => {
+    // Localização específica (latitude e longitude)
+    const latitude = '-29.634684668298988';
+    const longitude = '-50.8127040008485';
+
+    // Abre o Google Maps com a localização específica
+    const url = `https://www.google.com/maps?q=${latitude},${longitude}`;
+    Linking.openURL(url);
+  }
 
   const fetchData = useCallback(async () => {
     try {
@@ -117,7 +128,7 @@ export default function Home({ navigation }) {
               <Text style={styles.schedulingText}>Consulta marcada</Text>
             </View>
             <View style={styles.halfB}>
-              <View style={[styles.options,{backgroundColor: darkMode ? '#6F7BF7' : '#fff'}]}>
+              <View style={[styles.options,{backgroundColor: darkMode ? '#808080' : '#fff'}]}>
                 <FontAwesome
                   name="calendar-o"
                   size={20}
@@ -128,7 +139,7 @@ export default function Home({ navigation }) {
                   {useDay.length === 1 ? `0${useDay}` : useDay}/{useMonth}
                 </Text>
               </View>
-              <View style={[styles.options,{backgroundColor: darkMode ? '#6F7BF7' : '#fff'}]}>
+              <View style={[styles.options,{backgroundColor: darkMode ? '#808080' : '#fff'}]}>
                 <FontAwesome
                   name="clock-o"
                   size={25}
@@ -137,15 +148,15 @@ export default function Home({ navigation }) {
                 />
                 <Text style={[styles.optionsText,{color: darkMode ? '#fff' : '#6F7BF7'}]}>{useTime}</Text>
               </View>
-              <View style={[styles.options,{backgroundColor: darkMode ? '#6F7BF7' : '#fff'}]}>
+              <TouchableOpacity onPress={openGoogleMaps} style={[styles.options,{width: 120, backgroundColor: '#6F7BF7'}]}>
                 <MaterialCommunityIcons
                   name="map-marker-radius-outline"
                   size={20}
-                  color={darkMode ? '#fff' : '#6F7BF7'}
+                  color='#fff'
                   style={{ marginRight: 5 }}
                 />
-                <Text style={[styles.optionsText,{color: darkMode ? '#fff' : '#6F7BF7'}]}>APODEF</Text>
-              </View>
+                <Text style={[styles.optionsText,{color: '#fff'}]}>Ver no mapa</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -251,7 +262,7 @@ const styles = StyleSheet.create({
   },
   halfB: {
     height: 100,
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     borderRadius: 10,
@@ -259,6 +270,7 @@ const styles = StyleSheet.create({
   options: {
     width: 90,
     height: 60,
+    marginRight: 5,
     backgroundColor: "#fff",
     borderRadius: 10,
     flexDirection: "row",

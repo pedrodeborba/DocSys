@@ -107,7 +107,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Weather">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Login"
           component={Login}
