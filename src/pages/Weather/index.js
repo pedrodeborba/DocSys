@@ -1,20 +1,36 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity, ScrollView } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
-import { fetchLocations, fetchWeatherForecast } from '../../api/weather';
+import { fetchWeatherForecast } from '../../api/weather';
 import { weatherImages } from '../../constants/weather';
-import { getData} from '../../utils/asyncStorage';
+import { getData, loadDarkMode } from '../../utils/asyncStorage';
 
 export default function Weather({ navigation }) {
 
-  const [showSearch, toggleSearch] = useState(false);
-  const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [weather, setWeather] = useState({});
+  const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
     fetchMyWeatherData();
   }, []);
+
+  useEffect(() => {
+    const updateDarkModeState = async () => {
+      try {
+        const darkModeValue = await loadDarkMode();
+        setDarkMode(darkModeValue);
+      } catch (error) {
+        console.error('Erro ao carregar o modo escuro:', error);
+      }
+    };
+
+    const onFocus = navigation.addListener('focus', updateDarkModeState);
+
+    return () => {
+      onFocus();
+    };
+  }, [navigation]);
 
   const fetchMyWeatherData = async () => {
     let myCity = await getData('city');
@@ -29,7 +45,6 @@ export default function Weather({ navigation }) {
       setWeather(data);
       setLoading(false);
     })
-
   }
 
   const { location, current } = weather;
@@ -37,8 +52,8 @@ export default function Weather({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        blurRadius={70}
-        source={require('../../../assets/images/weather/bg.png')}
+        blurRadius={darkMode ? 30 : 60}
+        source={darkMode ? require('../../../assets/images/weather/bg-darkmode.png') : require('../../../assets/images/weather/bg.png')}
         style={styles.backgroundImage}
       />
       <View style={styles.return}>
@@ -62,10 +77,17 @@ export default function Weather({ navigation }) {
         </Text>
       </View>
       <View style={styles.centerImage}>
-        <Image
-          style={{ width: 150, height: 150 }}
-          source={weatherImages[current?.condition?.text || 'other']}
-        />
+        {weather?.current?.condition?.text ? (
+          <Image
+            style={{ width: 150, height: 150 }}
+            source={weatherImages[weather.current.condition.text] || weatherImages['other']}
+          />
+        ) : (
+          <Image
+            style={{ width: 150, height: 150 }}
+            source={weatherImages['other']}
+          />
+        )}
       </View>
       <View style={styles.temp}>
         <Text style={styles.tempText}>{current?.temp_c}&#176;</Text>
@@ -119,12 +141,12 @@ export default function Weather({ navigation }) {
             dayName = dayName.split(',')[0];
 
             return (
-              <View 
+              <View
                 key={index}
                 style={styles.boxDay}
               >
                 <View>
-                  <Image 
+                  <Image
                     style={{ width: 50, height: 50 }}
                     source={weatherImages[item.day.condition.text || 'other']}
                   />
@@ -139,6 +161,9 @@ export default function Weather({ navigation }) {
             )
           })
         }
+        <View style={styles.scrollIndicator}>
+          <FontAwesome name="arrow-left" size={20} color="#fff" />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -246,5 +271,10 @@ const styles = StyleSheet.create({
   boxDayText: {
     color: "#fff",
     fontSize: 17
+  },
+  scrollIndicator: {
+    position: 'absolute',
+    right: 3,
+    bottom: 180,
   },
 });

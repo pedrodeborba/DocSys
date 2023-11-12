@@ -1,18 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  Image,
-  FlatList,
-  Modal,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, Modal, TouchableOpacity, TextInput } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { loadDarkMode } from '../../utils/asyncStorage';
 
 export default function Profile({ navigation }) {
   const [data, setdata] = useState([]);
@@ -23,6 +14,7 @@ export default function Profile({ navigation }) {
   const [nameProfile, setnameProfile] = useState("");
   const [schedulesProfile, setschedulesProfile] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
     const retrieveUserData = async () => {
@@ -57,11 +49,27 @@ export default function Profile({ navigation }) {
     };
 
     retrieveUserData();
-  }, [nameProfile, schedulesProfile]);
+  }, [nameProfile, schedulesProfile, darkMode]); 
+  
+  useEffect(() => {
+    const updateDarkModeState = async () => {
+      try {
+        const darkModeValue = await loadDarkMode();
+        setDarkMode(darkModeValue);
+      } catch (error) {
+        console.error('Erro ao carregar o modo escuro:', error);
+      }
+    };
+
+    const onFocus = navigation.addListener('focus', updateDarkModeState);
+
+    return () => {
+      onFocus();
+    };
+  }, [navigation]);
 
   const pickImage = async () => {
     try {
-
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -71,14 +79,12 @@ export default function Profile({ navigation }) {
 
       if (!result.canceled) {
         setProfileImage(result.assets[0].uri);
-        // Salve a URI no AsyncStorage
         await AsyncStorage.setItem("profileImage", result.assets[0].uri);
       }
     } catch (error) {
       console.error("Erro ao escolher a imagem da galeria:", error);
     }
   };
-
 
   const onPressItem = (item) => {
     setisModalVisible(true);
@@ -101,8 +107,8 @@ export default function Profile({ navigation }) {
 
     return (
       <TouchableOpacity style={styles.item} onPress={() => onPressItem(item)}>
-        <Text style={styles.label}>{prefix}</Text>
-        <Text style={styles.text}>{item.text}</Text>
+        <Text style={[styles.label,{color: darkMode ? '#fff' : "#52575D"}]}>{prefix}</Text>
+        <Text style={[styles.text, {color: darkMode ? '#fff' : "#52575D"}]}>{item.text}</Text>
       </TouchableOpacity>
     );
   };
@@ -145,10 +151,14 @@ export default function Profile({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container,{backgroundColor: darkMode ? '#1E1E1E' : '#fff'}]}>
       <View style={styles.titleBar}>
         <TouchableOpacity onPress={logout}>
-          <MaterialIcons name="logout" size={30} color="#52575D" />
+          <MaterialIcons 
+          name="logout" 
+          size={30} 
+          color={darkMode ? '#fff' : '#52575D'} 
+          />
         </TouchableOpacity>
       </View>
 
@@ -170,10 +180,10 @@ export default function Profile({ navigation }) {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={[styles.profileText, { fontWeight: "200", fontSize: 30, paddingBottom: 50, paddingTop: 50 }]}>
+        <Text style={[styles.profileText, { color: darkMode ? '#fff' : '#52575D', fontWeight: "200", fontSize: 30, paddingBottom: 50, paddingTop: 50 }]}>
           {nameProfile}
         </Text>
-        <Text style={[styles.profileText, { color: "#AEB5BC", fontSize: 14 }]}>
+        <Text style={[styles.profileText, { color: darkMode ? '#fff' : '#52575D', fontSize: 14 }]}>
           Paciente
         </Text>
       </View>
@@ -216,7 +226,7 @@ export default function Profile({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
   },
   profileText: {
     color: "#52575D",

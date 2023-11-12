@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { FontAwesome5 } from "react-native-vector-icons";
@@ -11,11 +11,12 @@ import {
   Modal,
 } from "react-native";
 import Calendar from "react-native-calendars/src/calendar";
+import { loadDarkMode } from '../../utils/asyncStorage';
 import { BACKEND_URL, LOCAL_URL } from "@env";
 
 const times = ["08:00", "09:00", "10:00", "16:00", "17:00", "18:00"];
 
-export default function Schedule() {
+export default function Schedule({ navigation }) {
   //calendar
   const [showModal, setShowModal] = useState(false);
   const [chosenTime, setChosenTime] = useState(null);
@@ -23,6 +24,24 @@ export default function Schedule() {
   const [validationMessage, setValidationMessage] = useState("");
   const [showValidationMessage, setShowValidationMessage] = useState(false);
   const [completeValidation, setCompleteValidation] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const updateDarkModeState = async () => {
+      try {
+        const darkModeValue = await loadDarkMode();
+        setDarkMode(darkModeValue);
+      } catch (error) {
+        console.error('Erro ao carregar o modo escuro:', error);
+      }
+    };
+
+    const onFocus = navigation.addListener('focus', updateDarkModeState);
+
+    return () => {
+      onFocus();
+    };
+  }, [navigation]);
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
@@ -71,6 +90,12 @@ export default function Schedule() {
           setShowValidationMessage(false);
         }, 3000);
       }
+    } else {
+      setValidationMessage("Selecione todas as opções para agendar!");
+      setShowValidationMessage(true);
+      setTimeout(() => {
+        setShowValidationMessage(false);
+      }, 5000);
     }
   };
 
@@ -81,11 +106,11 @@ export default function Schedule() {
         <Text style={styles.textTopView}>Agendamento</Text>
       </View>
 
-      <View style={styles.section}>
+      <View style={[styles.section, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
         <TouchableOpacity
           onPress={() => setShowModal(true)}
           style={{
-            backgroundColor: "#6F7BF7",
+            backgroundColor: darkMode ? '#363636' : '#6F7BF7',
             borderRadius: 10,
             margin: 40,
             padding: 10,
@@ -107,7 +132,7 @@ export default function Schedule() {
               handleDateSelection(date);
             }}
             onMonthChange={() => { }}
-            minDate={"2023-09-01"}
+            minDate={"2023-11-13"}
             maxDate={"2023-12-31"}
           />
         </Modal>
@@ -121,14 +146,17 @@ export default function Schedule() {
                     key={index}
                     style={[
                       styles.data,
-                      chosenTime === time,
+                      chosenTime === time && styles.selectedDate,
                     ]}
                     onPress={() => handleTimeSelection(time)}
                   >
                     <Text
                       style={[
                         styles.number,
-                        chosenTime === time && styles.selectedNumber,
+                        chosenTime === time && {
+                          color: darkMode ? '#708090' : '#6F7BF7',
+                          fontSize: 30, 
+                        },
                       ]}
                     >
                       {time}
@@ -143,14 +171,17 @@ export default function Schedule() {
                     key={index + 3}
                     style={[
                       styles.data,
-                      chosenTime === time,
+                      chosenTime === time && styles.selectedDate,
                     ]}
                     onPress={() => handleTimeSelection(time)}
                   >
                     <Text
                       style={[
                         styles.number,
-                        chosenTime === time && styles.selectedNumber,
+                        chosenTime === time && {
+                          color: darkMode ? '#708090' : '#6F7BF7',
+                          fontSize: 30, 
+                        },
                       ]}
                     >
                       {time}
@@ -163,7 +194,7 @@ export default function Schedule() {
         </View>
         <View style={styles.divSchedule}>
           <TouchableOpacity
-            style={styles.buttonSchedule}
+            style={[styles.buttonSchedule, { backgroundColor: darkMode ? '#363636' : '#6F7BF7' }]}
             onPress={handleSchedule}
           >
             <FontAwesome5
@@ -289,10 +320,6 @@ const styles = StyleSheet.create({
   textSchedule: {
     color: "#fff",
     fontSize: 20,
-  },
-  selectedNumber: {
-    color: "#6F7BF7",
-    fontSize: 30,
   },
   alertDanger: {
     width: "90%",

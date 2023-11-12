@@ -7,11 +7,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { FontAwesome } from "react-native-vector-icons";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
-import { fetchUserProfileData } from "../../utils/asyncStorage";
+import { MaterialCommunityIcons, Ionicons, FontAwesome } from "react-native-vector-icons";
+import { fetchUserProfileData, toggleDarkMode, loadDarkMode } from "../../utils/asyncStorage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({ navigation }) {
+
+  const [darkMode, setDarkMode] = useState(false);
   const [userName, setUserName] = useState("");
   const [useDay, setUseDay] = useState("");
   const [useMonth, setUseMonth] = useState("");
@@ -55,30 +57,54 @@ export default function Home({ navigation }) {
 
     return unsubscribe;
   }, [fetchData, navigation]);
+
+  useEffect(() => {
+    const loadDarkModeState = async () => {
+      try {
+        const storedDarkMode = await loadDarkMode();
+        setDarkMode(storedDarkMode);
+      } catch (error) {
+        console.error('Erro ao carregar o modo escuro:', error);
+      }
+    };
+
+    loadDarkModeState();
+  }, []);
+
+  const BtnToggleDarkMode = async () => {
+    const newDarkMode = await toggleDarkMode();
+    setDarkMode(newDarkMode);
+  };
+
   return (
-    <SafeAreaView style={styles.body}>
-      <View style={styles.header}>
-        <Image
-          source={profileImage ? { uri: profileImage } : require("../../../assets/images/profile/profile.png")}
-          style={{ width: 60, height: 60, marginLeft: 0, borderRadius: 50 }}
+    <SafeAreaView style={[styles.body, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
+    <View style={[styles.header, { backgroundColor: darkMode ? '#1E1E1E' : '#EDEFFF' }]}>
+      <Image
+        source={profileImage ? { uri: profileImage } : require("../../../assets/images/profile/profile.png")}
+        style={{ width: 60, height: 60, marginLeft: 0, borderRadius: 50 }}
+      />
+      <Text style={styles.headerText}>
+        Olá, {userName}
+        {"\n"}
+        <Text style={[styles.headerbText, { color: darkMode ? '#fff' : '#1E1E1E' }]}>Do que você precisa?</Text>
+      </Text>
+      <TouchableOpacity
+        onPress={BtnToggleDarkMode}
+        style={styles.darkModeButton}
+      >
+        <Ionicons
+          name={darkMode ? 'moon' : 'sunny'}
+          size={30}
+          color={darkMode ? '#ffff00' : '#FFD700'}
+          style={{ marginLeft: 40 }}
         />
-        <Text style={styles.headerText}>
-          Olá, {userName}
-          {"\n"}
-          <Text style={styles.headerbText}>Do que você precisa?</Text>
-        </Text>
-        <FontAwesome
-          name="bell-o"
-          size={23}
-          color="#6F7BF7"
-          style={{ marginLeft: 45 }}
-        />
-      </View>
+      </TouchableOpacity>
+    </View>
 
       <View style={styles.conteudo}>
-        <View style={styles.sectionOne}>
+        <View style={[styles.sectionOne, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
           {/*section*/}
-          <View style={styles.consultaMarcada}>
+          <View style={[styles.consultaMarcada, {backgroundColor: darkMode ? '#363636' : '#D8DDFC' }]}>
             <View style={styles.halfA}>
               {/*Metade da div: Icon and Title*/}
               <View style={styles.iconRadius}>
@@ -91,39 +117,41 @@ export default function Home({ navigation }) {
               <Text style={styles.schedulingText}>Consulta marcada</Text>
             </View>
             <View style={styles.halfB}>
-              <View style={styles.options}>
+              <View style={[styles.options,{backgroundColor: darkMode ? '#6F7BF7' : '#fff'}]}>
                 <FontAwesome
                   name="calendar-o"
                   size={20}
-                  color="#6F7BF7"
+                  color={darkMode ? '#fff' : '#6F7BF7'}
                   style={{ marginRight: 10 }}
                 />
-                <Text style={styles.optionsText}>{useDay}/{useMonth}</Text>
+                <Text style={[styles.optionsText,{color: darkMode ? '#fff' : '#6F7BF7'}]}>
+                  {useDay.length === 1 ? `0${useDay}` : useDay}/{useMonth}
+                </Text>
               </View>
-              <View style={styles.options}>
+              <View style={[styles.options,{backgroundColor: darkMode ? '#6F7BF7' : '#fff'}]}>
                 <FontAwesome
                   name="clock-o"
                   size={25}
-                  color="#6F7BF7"
+                  color={darkMode ? '#fff' : '#6F7BF7'}
                   style={{ marginRight: 10 }}
                 />
-                <Text style={styles.optionsText}>{useTime}</Text>
+                <Text style={[styles.optionsText,{color: darkMode ? '#fff' : '#6F7BF7'}]}>{useTime}</Text>
               </View>
-              <View style={styles.options}>
+              <View style={[styles.options,{backgroundColor: darkMode ? '#6F7BF7' : '#fff'}]}>
                 <MaterialCommunityIcons
                   name="map-marker-radius-outline"
                   size={20}
-                  color="#6F7BF7"
-                  style={{ marginRight: 10 }}
+                  color={darkMode ? '#fff' : '#6F7BF7'}
+                  style={{ marginRight: 5 }}
                 />
-                <Text style={styles.optionsText}>Parobé</Text>
+                <Text style={[styles.optionsText,{color: darkMode ? '#fff' : '#6F7BF7'}]}>APODEF</Text>
               </View>
             </View>
           </View>
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.box}>
+        <View style={[styles.section, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
+          <View style={[styles.box,{backgroundColor: darkMode ? '#363636' : '#D8DDFC' }]}>
             <TouchableOpacity onPress={() => navigation.navigate("Agendamento")} >
               <View style={styles.stylingArea}>
                 <View style={styles.iconRadius}>
@@ -139,8 +167,8 @@ export default function Home({ navigation }) {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.box}>
+        <View style={[styles.section, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
+          <View style={[styles.box,{backgroundColor: darkMode ? '#363636' : '#D8DDFC' }]}>
             <TouchableOpacity onPress={() => navigation.navigate("Weather")}>
               <View style={styles.stylingArea}>
                 <View style={styles.iconRadius}>
@@ -163,10 +191,10 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   body: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
   header: {
-    backgroundColor: "#EDEFFF",
+    backgroundColor: '#EDEFFF',
     height: "15%",
     paddingTop: 20,
     justifyContent: "center",
