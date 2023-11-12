@@ -9,9 +9,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "react-native-vector-icons";
 import { MaterialCommunityIcons } from "react-native-vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-
+import { fetchUserProfileData } from "../../utils/asyncStorage";
 
 export default function Home({ navigation }) {
   const [userName, setUserName] = useState("");
@@ -20,59 +18,48 @@ export default function Home({ navigation }) {
   const [useTime, setUseTime] = useState("");
   const [profileImage, setProfileImage] = useState(null);
 
-  const fetchUserProfileData = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     try {
-      const savedProfileImage = await AsyncStorage.getItem("profileImage");
-      if (savedProfileImage) {
-        setProfileImage(savedProfileImage);
+      const data = await fetchUserProfileData();
+
+      if (data.savedProfileImage) {
+        setProfileImage(data.savedProfileImage);
       }
 
-      const name = await AsyncStorage.getItem("patientName");
-      if (name) {
-        setUserName(name);
+      if (data.name) {
+        setUserName(data.name);
       }
 
-      const day = await AsyncStorage.getItem("scheduleDay");
-      if (day) {
-        setUseDay(day);
+      if (data.day) {
+        setUseDay(data.day);
       }
 
-      const month = await AsyncStorage.getItem("scheduleMonth");
-      if (month) {
-        setUseMonth(month);
+      if (data.month) {
+        setUseMonth(data.month);
       }
 
-      const time = await AsyncStorage.getItem("scheduleTime");
-      if (time) {
-        setUseTime(time);
+      if (data.time) {
+        setUseTime(data.time);
       }
     } catch (error) {
-      console.error("Erro ao recuperar dados do usuário:", error);
+      console.error('Erro ao recuperar dados do usuário:', error);
     }
   }, []);
 
   useEffect(() => {
-    fetchUserProfileData();
+    fetchData();
 
     const unsubscribe = navigation.addListener("focus", () => {
-      fetchUserProfileData();
+      fetchData();
     });
 
     return unsubscribe;
-  }, [fetchUserProfileData, navigation]);    
-
-  const agendar = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Agendamento" }],
-    });
-  };
-
+  }, [fetchData, navigation]);
   return (
     <SafeAreaView style={styles.body}>
       <View style={styles.header}>
         <Image
-          source={profileImage ? { uri: profileImage } : require("../../../assets/perfil.png")}
+          source={profileImage ? { uri: profileImage } : require("../../../assets/images/profile/profile.png")}
           style={{ width: 60, height: 60, marginLeft: 0, borderRadius: 50 }}
         />
         <Text style={styles.headerText}>
@@ -122,14 +109,14 @@ export default function Home({ navigation }) {
                 />
                 <Text style={styles.optionsText}>{useTime}</Text>
               </View>
-              <View style={styles.optionsEdit}>
-                <FontAwesome
-                  name="commenting-o"
+              <View style={styles.options}>
+                <MaterialCommunityIcons
+                  name="map-marker-radius-outline"
                   size={20}
-                  color="#fff"
+                  color="#6F7BF7"
                   style={{ marginRight: 10 }}
                 />
-                <Text style={styles.optionsTextEdit}>Contatar</Text>
+                <Text style={styles.optionsText}>Parobé</Text>
               </View>
             </View>
           </View>
@@ -137,7 +124,7 @@ export default function Home({ navigation }) {
 
         <View style={styles.section}>
           <View style={styles.box}>
-            <TouchableOpacity onPress={() => agendar()}>
+            <TouchableOpacity onPress={() => navigation.navigate("Agendamento")} >
               <View style={styles.stylingArea}>
                 <View style={styles.iconRadius}>
                   <MaterialCommunityIcons
@@ -154,16 +141,18 @@ export default function Home({ navigation }) {
 
         <View style={styles.section}>
           <View style={styles.box}>
-            <View style={styles.stylingArea}>
-              <View style={styles.iconRadius}>
-                <MaterialCommunityIcons
-                  name="calendar-cursor"
-                  size={23}
-                  color="#fff"
-                />
+            <TouchableOpacity onPress={() => navigation.navigate("Weather")}>
+              <View style={styles.stylingArea}>
+                <View style={styles.iconRadius}>
+                  <MaterialCommunityIcons
+                    name="weather-pouring"
+                    size={30}
+                    color="#fff"
+                  />
+                </View>
+                <Text style={styles.schedulingText}>Previsão do Tempo</Text>
               </View>
-              <Text style={styles.schedulingText}>Histórico de consultas</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -234,16 +223,15 @@ const styles = StyleSheet.create({
   },
   halfB: {
     height: 100,
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     flexDirection: "row",
     borderRadius: 10,
   },
   options: {
-    width: 95,
+    width: 90,
     height: 60,
     backgroundColor: "#fff",
-    marginLeft: 5,
     borderRadius: 10,
     flexDirection: "row",
     justifyContent: "center",
@@ -251,18 +239,6 @@ const styles = StyleSheet.create({
   },
   optionsText: {
     color: "#6F7BF7",
-  },
-  optionsEdit: {
-    width: 95,
-    height: 60,
-    backgroundColor: "#6F7BF7",
-    marginLeft: 5,
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  optionsTextEdit: {
-    color: "#fff",
   },
   section: {
     marginTop: 20,

@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("http://192.168.255.86:3002/login", {
+      const response = await axios.post("https://backend-tcc-teal.vercel.app/login", {
         email,
         password,
       });
@@ -129,7 +129,7 @@ export default function Login({ navigation }) {
             width: logoAnimated.x,
             height: logoAnimated.y,
           }}
-          source={require("../../../assets/logo.png")}
+          source={require("../../../assets/images/login/logo.png")}
         />
       </View>
 

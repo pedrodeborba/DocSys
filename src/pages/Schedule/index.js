@@ -38,7 +38,7 @@ export default function Schedule() {
       try {
         const patientId = await AsyncStorage.getItem("patientId");
         const patientName = await AsyncStorage.getItem("patientName");
-        const response = await axios.post("http://192.168.255.86:3002/schedule/${patientId}", {
+        const response = await axios.post("https://backend-tcc-teal.vercel.app/schedule/${patientId}", {
           patientName: patientName,
           day: selectedDate.day,
           month: selectedDate.month,
@@ -52,7 +52,7 @@ export default function Schedule() {
         await AsyncStorage.setItem("scheduleTime", chosenTime);
 
         console.log(selectedDate.day, selectedDate.month, chosenTime);
-  
+
         if (response.status === 201) {
           handleTimeSelection(null);
           setCompleteValidation(true);
@@ -73,7 +73,7 @@ export default function Schedule() {
       }
     }
   };
-  
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -106,7 +106,7 @@ export default function Schedule() {
               setShowModal(false);
               handleDateSelection(date);
             }}
-            onMonthChange={() => {}}
+            onMonthChange={() => { }}
             minDate={"2023-09-01"}
             maxDate={"2023-12-31"}
           />
@@ -121,7 +121,7 @@ export default function Schedule() {
                     key={index}
                     style={[
                       styles.data,
-                      chosenTime === time && styles.selectedData,
+                      chosenTime === time,
                     ]}
                     onPress={() => handleTimeSelection(time)}
                   >
@@ -143,7 +143,7 @@ export default function Schedule() {
                     key={index + 3}
                     style={[
                       styles.data,
-                      chosenTime === time && styles.selectedData,
+                      chosenTime === time,
                     ]}
                     onPress={() => handleTimeSelection(time)}
                   >
@@ -175,12 +175,17 @@ export default function Schedule() {
             <Text style={styles.textSchedule}>Agendar</Text>
           </TouchableOpacity>
 
+
           {showValidationMessage && (
-            <Text style={styles.errorValidationText}>{validationMessage}</Text>
+            <View style={styles.alertDanger}>
+              <Text style={styles.errorValidationText}>{validationMessage}</Text>
+            </View>
           )}
 
           {completeValidation && (
-            <Text style={styles.completeValidationText}>Consulta marcada!</Text>
+            <View style={styles.alertSeccess}>
+              <Text style={styles.completeValidationText}>Consulta marcada!</Text>
+            </View>
           )}
         </View>
       </View>
@@ -285,23 +290,36 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 20,
   },
-  selectedData: {
-    backgroundColor: "#6F7BF7",
-  },
   selectedNumber: {
-    color: "#fff",
+    color: "#6F7BF7",
+    fontSize: 30,
   },
-  selectedDay: {
-    color: "#fff",
+  alertDanger: {
+    width: "90%",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#f00",
+    borderRadius: 20,
+    marginTop: 20,
   },
   errorValidationText: {
-    color: "#f00",
-    fontSize: 16,
-    marginTop: 10,
+    color: "#fff",
+    fontSize: 15,
+    fontWeight: "bold",
   },
-  completeValidationText:{
-    color: "#6F7BF7",
-    fontSize: 25,
+  alertSeccess: {
+    width: "70%",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#3CB371",
+    borderRadius: 20,
     marginTop: 20,
+  },
+  completeValidationText: {
+    color: "#fff",
+    fontSize: 25,
+    fontWeight: "bold",
   }
 });

@@ -61,13 +61,14 @@ export default function Profile({ navigation }) {
 
   const pickImage = async () => {
     try {
+
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
-  
+
       if (!result.canceled) {
         setProfileImage(result.assets[0].uri);
         // Salve a URI no AsyncStorage
@@ -77,6 +78,7 @@ export default function Profile({ navigation }) {
       console.error("Erro ao escolher a imagem da galeria:", error);
     }
   };
+
 
   const onPressItem = (item) => {
     setisModalVisible(true);
@@ -146,16 +148,15 @@ export default function Profile({ navigation }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.titleBar}>
         <TouchableOpacity onPress={logout}>
-          <MaterialIcons name="logout" size={24} color="#52575D" />
+          <MaterialIcons name="logout" size={30} color="#52575D" />
         </TouchableOpacity>
       </View>
 
       <View style={{ alignSelf: "center" }}>
         <View style={styles.profileImage}>
           <Image
-            source={profileImage ? { uri: profileImage } : require("../../../assets/perfil.png")}
-            style={styles.image}
-            resizeMode="center"
+            source={profileImage ? { uri: profileImage } : require("../../../assets/images/profile/profile.png")}
+            style={{ width: 200, height: 200, marginLeft: 0, borderRadius: 50 }}
           />
         </View>
         <TouchableOpacity onPress={pickImage} style={styles.add}>
@@ -220,17 +221,12 @@ const styles = StyleSheet.create({
   profileText: {
     color: "#52575D",
   },
-  image: {
-    flex: 1,
-    height: undefined,
-    width: undefined,
-  },
   titleBar: {
-    marginTop: 24,
+    marginTop: 30,
     marginHorizontal: 16,
   },
   profileImage: {
-    width: 250,
+    width: 200,
     height: 200,
     borderRadius: 500,
     overflow: "hidden",
