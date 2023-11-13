@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { BACKEND_URL, LOCAL_URL } from "@env";
+import { BACKEND_URL } from '@env';
 import {
   StyleSheet,
   Text,
@@ -20,7 +20,7 @@ export default function Login({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post("https://backend-tcc-teal.vercel.app/login", {
+      const response = await axios.post(`${BACKEND_URL}/login`, {
         email,
         password,
       });

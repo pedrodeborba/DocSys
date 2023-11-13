@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import Calendar from "react-native-calendars/src/calendar";
 import { loadDarkMode } from '../../utils/asyncStorage';
-import { BACKEND_URL, LOCAL_URL } from "@env";
+import {BACKEND_URL} from '@env'
 
 const times = ["08:00", "09:00", "10:00", "16:00", "17:00", "18:00"];
 
@@ -55,7 +55,7 @@ export default function Schedule({ navigation }) {
       try {
         const patientId = await AsyncStorage.getItem("patientId");
         const patientName = await AsyncStorage.getItem("patientName");
-        const response = await axios.post("https://backend-tcc-teal.vercel.app/schedule/${patientId}", {
+        const response = await axios.post(`${BACKEND_URL}/schedule/${patientId}`, {
           patientName: patientName,
           day: selectedDate.day,
           month: selectedDate.month,
