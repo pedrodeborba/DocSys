@@ -8,7 +8,6 @@ import {
   View,
   SafeAreaView,
   TouchableOpacity,
-  Modal,
 } from "react-native";
 import Calendar from "react-native-calendars/src/calendar";
 import { loadDarkMode } from '../../utils/asyncStorage';
@@ -17,8 +16,8 @@ import { BACKEND_URL, LOCAL_URL } from "@env";
 const times = ["08:00", "09:00", "10:00", "16:00", "17:00", "18:00"];
 
 export default function Schedule({ navigation }) {
+
   //calendar
-  const [showModal, setShowModal] = useState(false);
   const [chosenTime, setChosenTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [validationMessage, setValidationMessage] = useState("");
@@ -45,7 +44,6 @@ export default function Schedule({ navigation }) {
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
-    setShowModal(false);
   };
 
   const handleTimeSelection = (time) => {
@@ -83,7 +81,7 @@ export default function Schedule({ navigation }) {
         if (error.response && error.response.status === 400) {
           setValidationMessage(error.response.data.error);
         } else {
-          setValidationMessage("Erro ao agendar consulta. Selecione todas as opções para agendar!");
+          setValidationMessage("Selecione todas as opções para agendar!");
         }
         setShowValidationMessage(true);
         setTimeout(() => {
@@ -101,126 +99,120 @@ export default function Schedule({ navigation }) {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topView}>
-        <Text style={styles.textTopView}>Agendamento</Text>
-      </View>
+    
+      <SafeAreaView style={styles.container}>
+        
 
-      <View style={[styles.section, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
-        <TouchableOpacity
-          onPress={() => setShowModal(true)}
-          style={{
-            backgroundColor: darkMode ? '#363636' : '#6F7BF7',
-            borderRadius: 10,
-            margin: 40,
-            padding: 10,
-            width: 300,
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ color: "#fff", fontSize: 22, paddingBottom: 10 }}>
-            Aperte para escolher data
-          </Text>
-          <FontAwesome5 name="hand-point-up" size={22} color={"#fff"} />
-        </TouchableOpacity>
-        <Modal visible={showModal} animationType="fade">
-          <Calendar
-            style={{ borderRadius: 10, elevation: 4, margin: 40 }}
-            onDayPress={(date) => {
-              console.log(date);
-              setShowModal(false);
-              handleDateSelection(date);
-            }}
-            onMonthChange={() => { }}
-            minDate={"2023-11-13"}
-            maxDate={"2023-12-31"}
-          />
-        </Modal>
+        <View style={[styles.section, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
+        
+          <View style={styles.viewCalendar}>
+            <Calendar
+              style={{ width: 350, height: 370, borderRadius: 10,borderWidth: 1, elevation: 5, borderColor: darkMode ? '#000' : '#6F7BF7'}}
+              theme={{
+                textMonthFontSize: 20,
+                textMonthFontWeight: 'bold',
+                todayTextColor: '#6F7BF7',
+                arrowColor: '#6F7BF7',
+                selectedDayBackgroundColor: '#6F7BF7',
+                selectedDayTextColor: '#fff',
+                textDayFontSize: 16,
+              }}
+              markedDates={{
+                [selectedDate ? `${selectedDate.year}-${selectedDate.month}-${selectedDate.day}` : '']: {
+                  selected: true,
+                  selectedColor: '#6F7BF7',
+                },
+              }}
+              onDayPress={(date) => {
+                handleDateSelection(date);
+              }}
+              onMonthChange={() => { }}
+              minDate={"2023-11-14"}
+              maxDate={"2023-12-31"}
+            />
+          </View>
 
-        <View>
-          <View style={styles.calendar}>
-            <View style={styles.times}>
-              <View style={styles.lineDatas}>
-                {times.slice(0, 3).map((time, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    style={[
-                      styles.data,
-                      chosenTime === time && styles.selectedDate,
-                    ]}
-                    onPress={() => handleTimeSelection(time)}
-                  >
-                    <Text
+          <View>
+            <View style={[styles.searchTime, {backgroundColor: darkMode ? '#1E1E1E' : '#6F7BF7' }]}>
+              <View style={[styles.times, {backgroundColor: darkMode ? '#363636' : '#fff' }]}>
+                <View style={styles.lineDatas}>
+                  {times.slice(0, 3).map((time, index) => (
+                    <TouchableOpacity
+                      key={index}
                       style={[
-                        styles.number,
-                        chosenTime === time && {
-                          color: darkMode ? '#708090' : '#6F7BF7',
-                          fontSize: 30, 
-                        },
+                        styles.data,
+                        chosenTime === time && styles.selectedDate,
                       ]}
+                      onPress={() => handleTimeSelection(time)}
                     >
-                      {time}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+                      <Text
+                        style={[
+                          styles.number,
+                          {color: darkMode ? '#fff' : '#1E1E1E'},
+                          chosenTime === time && {fontSize: 30, color: '#6F7BF7'},
+                        ]}
+                      >
+                        {time}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
 
-              <View style={styles.lineDatas}>
-                {times.slice(3).map((time, index) => (
-                  <TouchableOpacity
-                    key={index + 3}
-                    style={[
-                      styles.data,
-                      chosenTime === time && styles.selectedDate,
-                    ]}
-                    onPress={() => handleTimeSelection(time)}
-                  >
-                    <Text
+                <View style={styles.lineDatas}>
+                  {times.slice(3).map((time, index) => (
+                    <TouchableOpacity
+                      key={index + 3}
                       style={[
-                        styles.number,
-                        chosenTime === time && {
-                          color: darkMode ? '#708090' : '#6F7BF7',
-                          fontSize: 30, 
-                        },
+                        styles.data,
+                        chosenTime === time && styles.selectedDate,
                       ]}
+                      onPress={() => handleTimeSelection(time)}
                     >
-                      {time}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                      <Text
+                        style={[
+                          styles.number,
+                          {color: darkMode ? '#fff' : '#1E1E1E'},
+                          chosenTime === time && {fontSize: 30, color: '#6F7BF7'},
+                        ]}
+                      >
+                        {time}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
               </View>
             </View>
           </View>
+          <View style={styles.divSchedule}>
+            <TouchableOpacity
+              style={[styles.buttonSchedule, { backgroundColor: darkMode ? '#363636' : '#6F7BF7' }]}
+              onPress={handleSchedule}
+            >
+              <FontAwesome5
+                name="check"
+                size={23}
+                color="#fff"
+                style={{ marginLeft: 45 }}
+              />
+              <Text style={styles.textSchedule}>Agendar</Text>
+            </TouchableOpacity>
+
+
+            {showValidationMessage && (
+              <View style={styles.alertDanger}>
+                <Text style={styles.errorValidationText}>{validationMessage}</Text>
+              </View>
+            )}
+
+            {completeValidation && (
+              <View style={styles.alertSeccess}>
+                <Text style={styles.completeValidationText}>Consulta marcada com sucesso!</Text>
+              </View>
+            )}
+          </View>
         </View>
-        <View style={styles.divSchedule}>
-          <TouchableOpacity
-            style={[styles.buttonSchedule, { backgroundColor: darkMode ? '#363636' : '#6F7BF7' }]}
-            onPress={handleSchedule}
-          >
-            <FontAwesome5
-              name="check"
-              size={23}
-              color="#fff"
-              style={{ marginLeft: 45 }}
-            />
-            <Text style={styles.textSchedule}>Agendar</Text>
-          </TouchableOpacity>
-
-
-          {showValidationMessage && (
-            <View style={styles.alertDanger}>
-              <Text style={styles.errorValidationText}>{validationMessage}</Text>
-            </View>
-          )}
-
-          {completeValidation && (
-            <View style={styles.alertSeccess}>
-              <Text style={styles.completeValidationText}>Consulta marcada!</Text>
-            </View>
-          )}
-        </View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    
   );
 }
 
@@ -242,7 +234,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     backgroundColor: "#fff",
-    justifyContent: "center",
     alignItems: "center",
   },
   buttonData: {
@@ -260,9 +251,13 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     fontSize: 15,
   },
-  calendar: {
+ searchTime: {
+    backgroundColor: '#6F7BF7',
+    width: 350,
+    height: 160,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 10,
   },
   datas: {
     width: "80%",
@@ -271,12 +266,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   times: {
-    width: "80%",
+    width: "100%",
     height: 160,
-    backgroundColor: "#fff",
-    marginLeft: 35,
-    marginRight: 35,
-    marginBottom: 20,
     borderRadius: 10,
   },
   lineDatas: {
@@ -294,9 +285,14 @@ const styles = StyleSheet.create({
     gap: 10,
     marginLeft: 5,
   },
+  viewCalendar: {
+    height: 400,
+    backgroundColor: "#000",
+    justifyContent: "center",
+    backgroundColor: 'transparent',
+  },
   number: {
     fontSize: 20,
-    color: "#203F6B",
   },
   day: {
     fontSize: 15,
@@ -312,6 +308,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     paddingLeft: 20,
+    marginTop: 10,
     gap: 10,
     backgroundColor: "#6F7BF7",
     borderRadius: 20,
@@ -322,8 +319,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   alertDanger: {
-    width: "90%",
-    height: 50,
+    height: 30,
+    paddingLeft: 10,
+    paddingRight: 10,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#f00",
@@ -336,17 +334,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   alertSeccess: {
-    width: "70%",
-    height: 50,
+    height: 30,
+    paddingLeft: 10,
+    paddingRight: 10,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#3CB371",
     borderRadius: 20,
-    marginTop: 20,
+    marginTop: 15,
   },
   completeValidationText: {
     color: "#fff",
-    fontSize: 25,
+    fontSize: 15,
     fontWeight: "bold",
   }
 });

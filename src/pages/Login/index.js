@@ -89,17 +89,17 @@ export default function Login({ navigation }) {
   function keyboardDidShow() {
     Animated.parallel([
       Animated.timing(logoAnimated.x, {
-        toValue: 150,
+        toValue: 200,
         duration: 100,
         useNativeDriver: false,
       }),
       Animated.timing(logoAnimated.y, {
-        toValue: 150,
+        toValue: 200,
         duration: 100,
         useNativeDriver: false,
       }),
       Animated.timing(logoSizeAnimated, {
-        toValue: 150,
+        toValue: 200,
         duration: 100,
         useNativeDriver: false,
       }),
@@ -126,6 +126,7 @@ export default function Login({ navigation }) {
       <View style={styles.logo}>
         <Animated.Image
           style={{
+            borderRadius: 20,
             width: logoAnimated.x,
             height: logoAnimated.y,
           }}
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
   },
   logo: {
     flex: 1,
-    backgroundColor: "#6F7BF7",
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",

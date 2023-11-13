@@ -14,6 +14,7 @@ export default function Profile({ navigation }) {
   const [nameProfile, setnameProfile] = useState("");
   const [schedulesProfile, setschedulesProfile] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const [consultasMarcadas, setConsultasMarcadas] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function Profile({ navigation }) {
         if (schedulesString) {
           const schedules = parseInt(schedulesString, 10);
           setschedulesProfile(schedules);
+          setConsultasMarcadas(schedules);
         }
 
         if (savedProfileImage) {
@@ -38,7 +40,6 @@ export default function Profile({ navigation }) {
 
         const newData = [
           { id: 1, text: nameProfile || "" },
-          { id: 2, text: schedulesProfile.toString() },
         ];
 
         setdata(newData);
@@ -93,25 +94,33 @@ export default function Profile({ navigation }) {
   };
 
   const renderItem = ({ item, index }) => {
-    let prefix = "";
     switch (index) {
       case 0:
-        prefix = "Nome: ";
-        break;
-      case 1:
-        prefix = "Consultas realizadas: ";
-        break;
+        return (
+          <TouchableOpacity
+            style={[styles.item, { flexDirection: "row", alignItems: "center" }]}
+            onPress={() => onPressItem(item)}
+          >
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.text, { color: darkMode ? '#fff' : "#52575D" }]}>
+                {item.text}
+              </Text>
+            </View>
+            {index === 0 && (
+              <TouchableOpacity
+                style={styles.editButton}
+                onPress={() => onPressItem(item)}
+              >
+                <MaterialIcons name="edit" size={20} color="#6F7BF7" />
+              </TouchableOpacity>
+            )}
+          </TouchableOpacity>
+        );
       default:
-        break;
+        return null;
     }
-
-    return (
-      <TouchableOpacity style={styles.item} onPress={() => onPressItem(item)}>
-        <Text style={[styles.label,{color: darkMode ? '#fff' : "#52575D"}]}>{prefix}</Text>
-        <Text style={[styles.text, {color: darkMode ? '#fff' : "#52575D"}]}>{item.text}</Text>
-      </TouchableOpacity>
-    );
   };
+  
 
   const handleEditItem = (editItem) => {
     const newData = data.map((item) => {
@@ -180,7 +189,7 @@ export default function Profile({ navigation }) {
       </View>
 
       <View style={styles.infoContainer}>
-        <Text style={[styles.profileText, { color: darkMode ? '#fff' : '#52575D', fontWeight: "200", fontSize: 30, paddingBottom: 50, paddingTop: 50 }]}>
+        <Text style={[styles.profileText, { color: darkMode ? '#fff' : '#52575D', fontWeight: "600", fontSize: 30, paddingBottom: 50, paddingTop: 50 }]}>
           {nameProfile}
         </Text>
         <Text style={[styles.profileText, { color: darkMode ? '#fff' : '#52575D', fontSize: 14 }]}>
@@ -201,7 +210,7 @@ export default function Profile({ navigation }) {
         visible={isModalVisible}
         onRequestClose={() => setisModalVisible(false)}
       >
-        <View style={styles.modalView}>
+        <View style={[styles.modalView, {backgroundColor: darkMode ? '#1E1E1E' : '#fff'}]}>
           <Text style={styles.text}>Editando... </Text>
           <TextInput
             style={styles.textInput}
@@ -219,6 +228,11 @@ export default function Profile({ navigation }) {
           </TouchableOpacity>
         </View>
       </Modal>
+
+      <View style={styles.consultasView}>
+        <Text style={[styles.textConsultasView,{color: darkMode ? '#fff' : '#52575D'}]}>Consultas marcadas: {consultasMarcadas}</Text>
+      </View>
+      
     </SafeAreaView>
   );
 }
@@ -262,7 +276,6 @@ const styles = StyleSheet.create({
   flatListContent: {
     width: "80%",
     alignSelf: "center",
-    paddingBottom: 70,
     marginTop: 10,
   },
   item: {
@@ -271,19 +284,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopWidth: 1,
     borderTopColor: "#6F7BF7",
+    fontWeight: "bold",
     paddingHorizontal: 10,
     borderRadius: 10,
     marginTop: 5,
   },
-  label: {
-    fontWeight: "bold",
-    marginRight: 5,
-    fontSize: 16,
-    color: "#52575D",
-  },
   text: {
     fontSize: 16,
     color: "#52575D",
+    fontWeight: "bold",
   },
   textInput: {
     width: "90%",
@@ -299,6 +308,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  consultasView:{
+    paddingLeft: 50,
+    marginTop: 20,
+  },
+  textConsultasView:{
+    fontSize: 16,
+    paddingVertical: 10,
+    marginBottom: 250
+  },
   touchableSave: {
     backgroundColor: "#6F7BF7",
     paddingHorizontal: 100,
@@ -311,4 +329,8 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     fontSize: 16,
   },
+  editButton: {
+    marginLeft: 'auto',
+    padding: 10,
+  }, 
 });
