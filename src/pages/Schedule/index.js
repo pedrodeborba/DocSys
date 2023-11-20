@@ -79,9 +79,7 @@ export default function Schedule({ navigation }) {
         }
       } catch (error) {
         if (error.response && error.response.status === 400) {
-          setValidationMessage(error.response.data.error);
-        } else {
-          setValidationMessage("Selecione todas as opções para agendar!");
+          setValidationMessage("Erro ao agendar consulta, tente novamente mais tarde", error.response.data.error);
         }
         setShowValidationMessage(true);
         setTimeout(() => {
@@ -107,7 +105,7 @@ export default function Schedule({ navigation }) {
         
           <View style={styles.viewCalendar}>
             <Calendar
-              style={{ width: 350, height: 370, borderRadius: 10,borderWidth: 1, elevation: 5, borderColor: darkMode ? '#000' : '#6F7BF7'}}
+              style={{ width: 350, height: 370, borderRadius: 10, borderWidth: 1, elevation: 5, borderColor: darkMode ? '#000' : '#6F7BF7'}}
               theme={{
                 textMonthFontSize: 20,
                 textMonthFontWeight: 'bold',
@@ -219,6 +217,8 @@ export default function Schedule({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 50,
+    backgroundColor: "#fff",
   },
   topView: {
     backgroundColor: "#6F7BF7",

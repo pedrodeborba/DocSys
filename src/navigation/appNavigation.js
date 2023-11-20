@@ -55,15 +55,7 @@ export function TabNavigator() {
         name="Agendamento"
         component={Schedule}
         options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: "#6F7BF7",
-          },
-          headerTitleStyle: {
-            textAlign: "center",
-          },
-          headerTitleAlign: 'center',
-          headerTintColor: "#fff",
+          headerShown: false,
 
           tabBarIcon: ({ color, size, focused }) => {
             //Se estiver na tela o focused = true, já em outra tela focused = false.
@@ -115,7 +107,7 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Login"
           component={Login}

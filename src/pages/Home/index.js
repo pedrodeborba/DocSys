@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   options: {
-    width: 90,
+    width: 85,
     height: 60,
     marginRight: 5,
     backgroundColor: "#fff",
