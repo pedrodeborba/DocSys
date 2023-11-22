@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons, Ionicons, FontAwesome } from "react-native-vector-icons";
 import { fetchUserProfileData, toggleDarkMode, loadDarkMode } from "../../utils/asyncStorage";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({ navigation }) {
 
@@ -243,7 +242,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 50,
-    backgroundColor: "#6F7BF7",
+    backgroundColor: '#6F7BF7',
     marginLeft: 20,
     justifyContent: "center",
     alignItems: "center",

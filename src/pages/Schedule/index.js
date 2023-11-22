@@ -98,14 +98,10 @@ export default function Schedule({ navigation }) {
 
   return (
     
-      <SafeAreaView style={styles.container}>
-        
-
-        <View style={[styles.section, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
-        
+      <SafeAreaView style={[styles.container, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
           <View style={styles.viewCalendar}>
             <Calendar
-              style={{ width: 350, height: 370, borderRadius: 10, borderWidth: 1, elevation: 5, borderColor: darkMode ? '#000' : '#6F7BF7'}}
+              style={{borderRadius: 10, borderWidth: 1, elevation: 5, borderColor: darkMode ? '#000' : '#6F7BF7'}}
               theme={{
                 textMonthFontSize: 20,
                 textMonthFontWeight: 'bold',
@@ -125,12 +121,12 @@ export default function Schedule({ navigation }) {
                 handleDateSelection(date);
               }}
               onMonthChange={() => { }}
-              minDate={"2023-11-14"}
+              minDate={"2023-11-23"}
               maxDate={"2023-12-31"}
             />
           </View>
 
-          <View>
+          <View style={styles.viewDates}>
             <View style={[styles.searchTime, {backgroundColor: darkMode ? '#1E1E1E' : '#6F7BF7' }]}>
               <View style={[styles.times, {backgroundColor: darkMode ? '#363636' : '#fff' }]}>
                 <View style={styles.lineDatas}>
@@ -208,7 +204,6 @@ export default function Schedule({ navigation }) {
               </View>
             )}
           </View>
-        </View>
       </SafeAreaView>
     
   );
@@ -217,57 +212,30 @@ export default function Schedule({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
     backgroundColor: "#fff",
-  },
-  topView: {
-    backgroundColor: "#6F7BF7",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-  textTopView: {
-    fontSize: 25,
-    color: "#fff",
-  },
-  section: {
-    flex: 1,
-    width: "100%",
-    backgroundColor: "#fff",
-    alignItems: "center",
-  },
-  buttonData: {
-    backgroundColor: "#EDEFFF",
-    alignSelf: "stretch",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 10,
-  },
-  textData: {
-    color: "#203F6B",
-    marginVertical: 20,
-    fontSize: 15,
-  },
- searchTime: {
-    backgroundColor: '#6F7BF7',
-    width: 350,
-    height: 160,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
   },
-  datas: {
+  viewCalendar: {
     width: "80%",
+    justifyContent: "center",
+  },
+  viewDates: {
+    width: "80%",
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  searchTime: {
+    backgroundColor: '#6F7BF7',
+    width: "100%",
     height: 160,
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
   },
   times: {
     width: "100%",
-    height: 160,
     borderRadius: 10,
   },
   lineDatas: {
@@ -284,12 +252,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     marginLeft: 5,
-  },
-  viewCalendar: {
-    height: 400,
-    backgroundColor: "#000",
-    justifyContent: "center",
-    backgroundColor: 'transparent',
   },
   number: {
     fontSize: 20,

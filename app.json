@@ -31,6 +31,7 @@
       "eas": {
         "projectId": "3de1a1bd-9d00-43ab-aabc-90ecf8bed641"
       }
-    }
+    },
+    "plugins": ["expo-image-picker"]
   }
 }

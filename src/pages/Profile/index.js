@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, Modal, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, Modal, TouchableOpacity, TextInput, LogBox } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { loadDarkMode } from '../../utils/asyncStorage';
 
@@ -50,8 +50,8 @@ export default function Profile({ navigation }) {
     };
 
     retrieveUserData();
-  }, [nameProfile, schedulesProfile, darkMode]); 
-  
+  }, [nameProfile, schedulesProfile, darkMode]);
+
   useEffect(() => {
     const updateDarkModeState = async () => {
       try {
@@ -81,6 +81,7 @@ export default function Profile({ navigation }) {
       if (!result.canceled) {
         setProfileImage(result.assets[0].uri);
         await AsyncStorage.setItem("profileImage", result.assets[0].uri);
+        LogBox.ignoreAllLogs();
       }
     } catch (error) {
       console.error("Erro ao escolher a imagem da galeria:", error);
@@ -120,7 +121,7 @@ export default function Profile({ navigation }) {
         return null;
     }
   };
-  
+
 
   const handleEditItem = (editItem) => {
     const newData = data.map((item) => {
@@ -160,13 +161,13 @@ export default function Profile({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={[styles.container,{backgroundColor: darkMode ? '#1E1E1E' : '#fff'}]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
       <View style={styles.titleBar}>
         <TouchableOpacity onPress={logout}>
-          <MaterialIcons 
-          name="logout" 
-          size={30} 
-          color={darkMode ? '#fff' : '#52575D'} 
+          <MaterialIcons
+            name="logout"
+            size={30}
+            color={darkMode ? '#fff' : '#52575D'}
           />
         </TouchableOpacity>
       </View>
@@ -197,42 +198,54 @@ export default function Profile({ navigation }) {
         </Text>
       </View>
 
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderItem}
-        extraData={isRender}
-        contentContainerStyle={styles.flatListContent}
-      />
+      <View style={styles.profileEdits}>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          extraData={isRender}
+          contentContainerStyle={styles.flatListContent}
+        />
 
-      <Modal
-        animationType="fade"
-        visible={isModalVisible}
-        onRequestClose={() => setisModalVisible(false)}
-      >
-        <View style={[styles.modalView, {backgroundColor: darkMode ? '#1E1E1E' : '#fff'}]}>
-          <Text style={styles.text}>Editando... </Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => setinputText(text)}
-            defaultValue={inputText}
-            editable={true}
-            multiline={false}
-            maxLength={200}
-          />
-          <TouchableOpacity
-            onPress={onPressSaveEdit}
-            style={styles.touchableSave}
-          >
-            <Text style={styles.textSave}>Salvar</Text>
-          </TouchableOpacity>
+        <Modal
+          animationType="fade"
+          visible={isModalVisible}
+          onRequestClose={() => setisModalVisible(false)}
+        >
+          <View style={styles.containerModal}>
+            <View style={styles.imageModal}>
+              <Image
+                source={require("../../../assets/images/profile/edit-profile.png")}
+                style={{ width: '100%', height: 200, borderRadius: 50}}
+              />
+            </View>
+            <View style={[styles.modalView, { backgroundColor: darkMode ? '#1E1E1E' : '#fff' }]}>
+              <Text style={styles.text}>Qual seu nome?</Text>
+              <TextInput
+                style={[styles.textInput, { color: darkMode ? '#fff' : '#6F7BF7', borderColor: darkMode ? '#52575D' : '#D8DDFC' }]}
+                onChangeText={(text) => setinputText(text)}
+                defaultValue={inputText}
+                editable={true}
+                multiline={false}
+                maxLength={200}
+              />
+              <TouchableOpacity
+                onPress={onPressSaveEdit}
+                style={styles.touchableSave}
+              >
+                <Text style={styles.textSave}>Salvar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <View style={styles.consultasView}>
+          <Text style={[styles.textConsultasView, { color: darkMode ? '#fff' : '#52575D' }]}>
+            Consultas marcadas: {consultasMarcadas}
+          </Text>
         </View>
-      </Modal>
-
-      <View style={styles.consultasView}>
-        <Text style={[styles.textConsultasView,{color: darkMode ? '#fff' : '#52575D'}]}>Consultas marcadas: {consultasMarcadas}</Text>
       </View>
-      
+
     </SafeAreaView>
   );
 }
@@ -271,14 +284,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 16,
   },
-
-  //FlatList
+  profileEdits: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  containerModal: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  imageModal: {
+    flex: 1,
+    width: "100%",
+    height: 200,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
   flatListContent: {
     width: "80%",
     alignSelf: "center",
     marginTop: 10,
   },
   item: {
+    width: "100%",
     height: 80,
     flexDirection: "row",
     alignItems: "center",
@@ -291,6 +320,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
+    marginBottom: 10,
     color: "#52575D",
     fontWeight: "bold",
   },
@@ -298,24 +328,25 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 50,
     borderColor: "#52575D",
-    borderWidth: 1,
+    borderWidth: 2,
     fontSize: 20,
     paddingLeft: 10,
     borderRadius: 20,
   },
   modalView: {
     flex: 1,
+    width: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
-  consultasView:{
-    paddingLeft: 50,
-    marginTop: 20,
+  consultasView: {
+    width: "80%",
+    paddingHorizontal: 10,
+    marginTop: 10,
   },
-  textConsultasView:{
+  textConsultasView: {
     fontSize: 16,
     paddingVertical: 10,
-    marginBottom: 250
   },
   touchableSave: {
     backgroundColor: "#6F7BF7",
@@ -332,5 +363,5 @@ const styles = StyleSheet.create({
   editButton: {
     marginLeft: 'auto',
     padding: 10,
-  }, 
+  },
 });
